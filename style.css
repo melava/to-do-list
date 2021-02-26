@@ -26,7 +26,12 @@ h2 {
     margin: 10vh 15%;
     display: flex;
     flex-wrap: wrap;
-    align-content: space-around;
+    align-content: space-evenly;
+}
+
+#form-overlay .quicklist {
+    height: auto;
+    min-height: 250px ;
 }
 
 .form > div {
@@ -39,8 +44,9 @@ h2 {
     margin: 0 15px 0 5px;
 }
 
-.form > div > input[type='text'] {
+.form > div > input[type='text'], .form > div > input[type='date'] {
     font-size: 18px;
+    margin-right: 10px;
 }
 
 .form > div > button {
@@ -50,7 +56,6 @@ h2 {
     font-size: 18px;
     padding: 8px 15px
 }
-
 
 #content-container {
     display: flex;
@@ -82,10 +87,10 @@ h2 {
     border-radius: 50%;
 }
 
-.project {
+#projects-container .project {
     border: 1px solid red;
     box-sizing: border-box;
-    padding: 8px 0;
+    padding: 8px 5px;
     margin: 10px 0;
 }
 
