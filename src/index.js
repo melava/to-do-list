@@ -1,6 +1,8 @@
 import { Project } from './projects/factory'
 import { printProject } from './projects/print'
 import { projectForm } from './projects/form'
+import { Task } from './tasks/factory'
+import { quickTaskForm } from './tasks/form'
 
 
 const quickListProjects = document.getElementById('quick-projects');
@@ -31,20 +33,24 @@ const addProjectToList = (project) => {
     return { projectArray }
 }
 
-
-// // const task = () => {
-// //     const name = _getName();
-// //     const dueDate = _getDueDate();
-// //     const description = getDescription();
-// //     const priority = getPriority();
-// //     const label = getLabel();
-// //     const status = getStatus();
-// // }
+const chooseTaskForm = () => {
+    const projectSelected = document.getElementsByClassName('project selected')[0]
+    if (projectSelected.className.includes('quick')) {
+        quickTaskForm();
+    } else if (projectSelected.className.includes('regular')) {
+        console.log('regular');
+        //regularTaskForm();
+    } else {
+        console.log('ho no, there isn\'t any project selected!')
+    }
+}
  
 
 
 // ----------------------------------CALLS
 addProject.addEventListener('click', projectForm);
+addToDo.addEventListener('click', chooseTaskForm);
+
 
 // add 2 prototype project to start the page
 const protoQuick = Project('quick', 'prototype-shopping-list', 0);

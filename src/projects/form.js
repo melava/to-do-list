@@ -6,7 +6,8 @@ const projectForm = () => {
     const overlay = document.createElement('div');
     overlay.id = 'form-overlay';
     const formContainer = document.createElement('div');
-    formContainer.classList.add('form')
+    formContainer.classList.add('form');
+    formContainer.classList.add('project');
     overlay.appendChild(formContainer);
     
     const radioContainer = document.createElement('div');
