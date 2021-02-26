@@ -88,3 +88,7 @@ h2 {
     padding: 8px 0;
     margin: 10px 0;
 }
+
+#projects-container .selected {
+    background-color: rgb(189, 189, 218);
+}
