@@ -1,6 +1,6 @@
-import { Project } from './projects/projectFactory'
-import { printProject } from './projects/printProject'
-import { projectForm } from './projects/projectForm'
+import { Project } from './projects/factory'
+import { printProject } from './projects/print'
+import { projectForm } from './projects/form'
 
 
 const quickListProjects = document.getElementById('quick-projects');

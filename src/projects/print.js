@@ -1,5 +1,5 @@
 import { quickListProjects, postitProjects } from '../index'
-import { isProjectSelected, toggleSelectedProject } from './selectProject'
+import { isProjectSelected, toggleSelectedProject } from './selection'
 
 
 const printProject = (project) => {
