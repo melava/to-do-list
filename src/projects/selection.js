@@ -1,4 +1,5 @@
 import { quickListProjects, postitProjects } from '../index'
+import { filterTasks } from '../tasks/filter'
 
 const isProjectSelected = (e) => {
     if (e.target.className.includes('selected')) {
@@ -6,6 +7,7 @@ const isProjectSelected = (e) => {
     } else {
         toggleSelectedProject();
         e.target.classList.add('selected');
+        filterTasks();
     }
 }
 

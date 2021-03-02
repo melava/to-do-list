@@ -1,4 +1,5 @@
-import { getInfoNewProject } from '../index'
+import { getInfoNewProject, addProjectToList } from '../index'
+import { printProject } from './print'
 
 const container = document.getElementById('content-container');
 
@@ -56,7 +57,12 @@ const projectForm = () => {
 
     container.appendChild(overlay);
 
-    submitButton.addEventListener('click', () => { getInfoNewProject(); closeOverlay() } )
+    submitButton.addEventListener('click', () => { 
+        let project = getInfoNewProject(); 
+        addProjectToList(project); 
+        printProject(project); 
+        closeOverlay() 
+    })
 }
 
 const closeOverlay = () => {

@@ -1,5 +1,6 @@
 import { quickListProjects, postitProjects } from '../index'
 import { isProjectSelected, toggleSelectedProject } from './selection'
+import { filterTasks } from '../tasks/filter'
 
 
 const printProject = (project) => {
@@ -11,6 +12,7 @@ const printProject = (project) => {
     project.type === 'quick' ? quickListProjects.appendChild(card) : postitProjects.appendChild(card);
     toggleSelectedProject();
     card.classList.add('selected');
+    filterTasks();
     card.addEventListener('click', isProjectSelected);
 };
 

@@ -1,14 +1,9 @@
-// // const task = () => {
-// //     const name = _getName();
-// //     const dueDate = _getDueDate();
-// //     const description = getDescription();
-// //     const priority = getPriority();
-// //     const label = getLabel();
-// //     const status = getStatus();
-// // }
-
-const Task = () => {
-    console.log('a task');
+const QuickTask = (dueDate, list, project, id) => {
+    return { dueDate, list, project, id }
 }
 
-export { Task }
+const RegularTask = (name, dueDate, description, project, priority, id) => {
+    return { name, dueDate, description, project, priority, id }
+}
+
+export { QuickTask, RegularTask }
