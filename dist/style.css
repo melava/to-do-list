@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 h1 {
@@ -16,7 +17,7 @@ h2 {
     position: absolute;
     background-color: rgba(65, 65, 126, 0.979);
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .form {
@@ -34,19 +35,36 @@ h2 {
     min-height: 250px ;
 }
 
+#form-overlay .regular {
+    height: 400px;
+}
+
 .form > div {
     flex-basis: 100%;
     text-align: center;
     font-size: 18px;
 }
 
+.quicklist > div {
+    margin: 12px 0;
+}
+
 .form > div > label {
     margin: 0 15px 0 5px;
 }
 
-.form > div > input[type='text'], .form > div > input[type='date'] {
+.form > div > input[type='text'], .form > div > input[type='date'], .form > div > textarea, .form > div > select {
     font-size: 18px;
-    margin-right: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+textarea {
+    vertical-align: super;
+    width: 80%;
+}
+
+.form > div > #add-item {
+    margin-left: 15px;
 }
 
 .form > div > button {
@@ -54,7 +72,12 @@ h2 {
     border: 1px solid navy;
     color: white;
     font-size: 18px;
-    padding: 8px 15px
+    padding: 8px 15px;
+}
+
+.form #quick-task-list {
+    margin: 0 10% 0 15%;
+    padding-left: 5%;
 }
 
 #content-container {
@@ -96,4 +119,35 @@ h2 {
 
 #projects-container .selected {
     background-color: rgb(189, 189, 218);
+}
+
+#task-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    margin: 15px 0
+}
+
+.task {
+    width: 200px;
+    min-height: 50px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    margin: 10px;
+    padding: 5px;
+}
+
+.task > p {
+    display: block;
+    text-align: center;
+}
+
+.post-it > h4 {
+    margin: 5px;
+    text-align: center;
+}
+
+.post-it > p {
+    text-align: left;
+    margin: 16px 5px;
 }
