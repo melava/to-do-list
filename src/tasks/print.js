@@ -17,6 +17,7 @@ const printQuickTask = (task) => {
     card.setAttribute('data-project', task.project);
 
     const title = document.createElement('p');
+    title.classList.add('centered');
     title.textContent = task.dueDate;
     card.appendChild(title);
 
@@ -40,10 +41,12 @@ const printRegularTask = (task) => {
     card.setAttribute('data-project', task.project);
 
     const title = document.createElement('h4');
+    title.classList.add('centered');
     title.textContent = task.name;
     card.appendChild(title);
 
     const dueDate = document.createElement('p');
+    dueDate.classList.add('underline');
     dueDate.textContent = task.dueDate;
     card.appendChild(dueDate);
 
@@ -57,17 +60,17 @@ const printRegularTask = (task) => {
 
     switch (task.priority) {
         case 'low':
-            card.style.backgroundColor = 'rgb(146, 210, 247)'
+            card.classList.add('priority-low')
             break;
         case 'normal':
-            card.style.backgroundColor = 'rgb(247, 227, 115)'
+            card.classList.add('priority-normal')
             break;
         case 'high':
-            card.style.backgroundColor = 'rgb(206, 126, 126)'
+            card.classList.add('priority-high')
             break;
                 
         default:
-            card.style.backgroundColor = 'rgb(247, 227, 115)'
+            card.classList.add('priority-normal')
             break;
     }
 

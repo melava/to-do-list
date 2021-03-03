@@ -5,9 +5,9 @@ const filterTasks = () => {
     taskContainer.childNodes.forEach(task => {
         const currentSelectedProject = document.getElementsByClassName('selected')[0].textContent;
         if(task.dataset.project === currentSelectedProject){
-            task.style.display = 'block'
+            task.classList.remove('hidden')
         } else {
-            task.style.display = 'none'
+            task.classList.add('hidden')
         }
     });
 }

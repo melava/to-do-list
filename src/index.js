@@ -3,7 +3,7 @@ import { projectForm } from './projects/form'
 import { printProject} from './projects/print'
 import { QuickTask, RegularTask } from './tasks/factory'
 import { quickTaskForm, regularTaskForm } from './tasks/form'
-import { printQuickTask } from './tasks/print'
+import { printQuickTask, printRegularTask } from './tasks/print'
 
 
 const quickListProjects = document.getElementById('quick-projects');
@@ -92,15 +92,20 @@ const addRegularTaskToList = (task) => {
 // ----------------------------------CALLS
 // add 2 prototype project to start the page
 const initiatePage = (() => {
+    const testQuickTask = QuickTask('2021-03-02', ['aaa', 'bbb'], 'prototype-shopping-list', 0);
+    const testRegTask = RegularTask('task prototype', '2021-03-09', 'description: lorem ipsum dolor sic amat.', 'prototype-classic-project', 'normal', 0);
+    addQuickTaskToList(testQuickTask);
+    addRegularTaskToList(testRegTask);
+    printQuickTask(testQuickTask);
+    printRegularTask(testRegTask);
+    
     const protoQuick = Project('quick', 'prototype-shopping-list', 0);
     const protoReg = Project('regular', 'prototype-classic-project', 1);
     addProjectToList(protoReg);
     addProjectToList(protoQuick);
     printProject(protoQuick);
-    const testTask = QuickTask('2021-03-02', ['aaa', 'bbb'], 'prototype-shopping-list', 0);
-    addQuickTaskToList(testTask);
-    printQuickTask(testTask);
     printProject(protoReg);
+    
 })();
 addProject.addEventListener('click', projectForm);
 addToDo.addEventListener('click', chooseTaskForm);
