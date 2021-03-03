@@ -1,3 +1,4 @@
+/* ---------------GENERAL--------------- */
 body {
     margin: 0;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -13,6 +14,39 @@ h2 {
     margin: 0;
 }
 
+h4 {
+    margin: 16px;
+}
+
+.centered {
+    text-align: center;
+}
+
+.underline {
+    display: inline;
+    border-bottom: 1px solid black;
+}
+
+.hidden {
+    display: none;
+}
+
+#content-container {
+    display: flex;
+    position: relative;
+}
+
+.button {
+    display: inline-block;
+    margin: 5px; 
+    padding: 10px 13px;
+    color: white;
+    background-color: rgb(48, 48, 163);
+    border: 1px solid navy;
+    border-radius: 50%;
+}
+
+/* ---------------FORMS--------------- */
 #form-overlay {
     position: absolute;
     background-color: rgba(65, 65, 126, 0.979);
@@ -80,34 +114,13 @@ textarea {
     padding-left: 5%;
 }
 
-#content-container {
-    display: flex;
-    position: relative;
-}
-
+/* ---------------PROJECTS COLUMN--------------- */
 #projects-container {
     border: 1px solid green;
     flex-basis: 290px;
     min-width: 290px;
     box-sizing: border-box;
     padding: 25px 10px;
-}
-
-#todos-container {
-    border: 1px solid blue;
-    flex-basis: 100%;
-    box-sizing: border-box;
-    padding: 25px 10px;
-}
-
-.button {
-    display: inline-block;
-    margin: 5px; 
-    padding: 10px 13px;
-    color: white;
-    background-color: rgb(48, 48, 163);
-    border: 1px solid navy;
-    border-radius: 50%;
 }
 
 #projects-container .project {
@@ -119,6 +132,14 @@ textarea {
 
 #projects-container .selected {
     background-color: rgb(189, 189, 218);
+}
+
+/* ---------------TASKS COLUMN--------------- */
+#todos-container {
+    border: 1px solid blue;
+    flex-basis: 100%;
+    box-sizing: border-box;
+    padding: 25px 10px;
 }
 
 #task-container {
@@ -134,20 +155,17 @@ textarea {
     border: 1px solid black;
     box-sizing: border-box;
     margin: 10px;
-    padding: 5px;
+    padding: 5px 10px;
 }
 
-.task > p {
-    display: block;
-    text-align: center;
+.priority-low {
+    background-color: rgb(146, 210, 247);
 }
 
-.post-it > h4 {
-    margin: 5px;
-    text-align: center;
+.priority-normal {
+    background-color: rgb(247, 227, 115);
 }
 
-.post-it > p {
-    text-align: left;
-    margin: 16px 5px;
+.priority-high {
+    background-color: rgb(206, 126, 126);
 }
