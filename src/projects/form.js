@@ -23,16 +23,17 @@ const projectForm = () => {
     inputQuick.id = 'quick';
     const labelRegular = document.createElement('label');
     labelRegular.setAttribute('for','regular');
-    labelRegular.textContent = 'Regular List';
+    labelRegular.textContent = 'Regular task';
     const inputRegular = document.createElement('input');
     inputRegular.type = 'radio';
     inputRegular.name = 'type';
     inputRegular.value = 'regular';
     inputRegular.id = 'regular';
-    radioContainer.appendChild(inputQuick);
-    radioContainer.appendChild(labelQuick);
+    inputRegular.checked = true;
     radioContainer.appendChild(inputRegular);
     radioContainer.appendChild(labelRegular);
+    radioContainer.appendChild(inputQuick);
+    radioContainer.appendChild(labelQuick);
     formContainer.appendChild(radioContainer);
 
     const textContainer = document.createElement('div');
@@ -56,12 +57,18 @@ const projectForm = () => {
     formContainer.appendChild(submitContainer);
 
     container.appendChild(overlay);
+    inputName.focus();
 
     submitButton.addEventListener('click', () => { 
-        let project = getInfoNewProject(); 
-        addProjectToList(project); 
-        printProject(project); 
-        closeOverlay() 
+        if (inputName.value) {
+            let project = getInfoNewProject(); 
+            addProjectToList(project); 
+            printProject(project); 
+            closeOverlay() 
+        } else {
+            console.log('Error: no name project');
+            inputName.focus();
+        }
     })
 }
 

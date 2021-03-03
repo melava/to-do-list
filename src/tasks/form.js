@@ -32,7 +32,7 @@ const quickTaskForm = () => {
     const labelName = document.createElement('label');
     labelName.setAttribute('for','item');
     labelName.textContent = 'List item';
-    const addItem = document.createElement('div');
+    const addItem = document.createElement('button');
     addItem.id = 'add-item';
     addItem.textContent = '+';
     addItem.classList.add('button');
@@ -54,11 +54,17 @@ const quickTaskForm = () => {
     formContainer.appendChild(submitContainer);
 
     container.appendChild(overlay);
+    inputName.focus();
 
     addItem.addEventListener('click', () => { 
-        addItemToList(inputName.value); 
-        printAddedItem(inputName.value);
-        clearInput(inputName)
+        if (inputName.value) {
+            addItemToList(inputName.value); 
+            printAddedItem(inputName.value);
+            clearInput(inputName)
+        } else {
+            console.log('error: empty item');
+            inputName.focus();
+        }
     })
     
     submitButton.addEventListener('click', () => { 
@@ -68,7 +74,8 @@ const quickTaskForm = () => {
             printQuickTask(quickList); 
             closeOverlay() 
         } else {
-            console.log('error : empty list')
+            console.log('error : empty list');
+            inputName.focus();
         }
     })
 }
@@ -151,13 +158,18 @@ const regularTaskForm = () => {
     formContainer.appendChild(submitContainer);
 
     container.appendChild(overlay);
+    inputName.focus();
 
     submitButton.addEventListener('click', () => { 
-        //console.log('in')
         let regularTask = getInfoNewRegularTask(); 
-        addRegularTaskToList(regularTask); 
-        printRegularTask(regularTask); 
-        closeOverlay() 
+        if (regularTask.name) {
+            addRegularTaskToList(regularTask); 
+            printRegularTask(regularTask); 
+            closeOverlay() 
+        } else {
+            console.log('error: no name');
+            inputName.focus();
+        }
     })
 }
 
