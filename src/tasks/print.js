@@ -1,4 +1,4 @@
-import { taskContainer } from '../index'
+import { taskContainer } from '../DOMGlobalManipulations'
 
 
 const printAddedItem = (lastItem) => {

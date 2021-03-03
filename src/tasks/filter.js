@@ -1,5 +1,4 @@
-
-const taskContainer = document.getElementById('task-container')
+import { taskContainer } from '../DOMGlobalManipulations'
 
 const filterTasks = () => {
     taskContainer.childNodes.forEach(task => {

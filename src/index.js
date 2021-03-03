@@ -1,3 +1,4 @@
+import { addProject, addToDo, getName, getDueDate, getDescription, getProjectName, getProjectNode, getPriority, getType } from './DOMGlobalManipulations'
 import { Project } from './projects/factory'
 import { projectForm } from './projects/form'
 import { printProject} from './projects/print'
@@ -5,27 +6,16 @@ import { QuickTask, RegularTask } from './tasks/factory'
 import { quickTaskForm, regularTaskForm } from './tasks/form'
 import { printQuickTask, printRegularTask } from './tasks/print'
 
-
-const quickListProjects = document.getElementById('quick-projects');
-const postitProjects = document.getElementById('postit-projects');
-const taskContainer = document.getElementById('task-container')
-const addProject = document.getElementById('add-project');
-const addToDo = document.getElementById('add-todo');
 let projectsArray = [];
 let quickList = [];
 let tasksArray = [];
 
 //get project info
 const getInfoNewProject = () => {
-    const getName = document.getElementById('name').value;
-    let getType = '';
-    if (document.getElementById('quick').checked) {
-        getType = document.getElementById('quick').value
-    } else if (document.getElementById('regular').checked) {
-        getType = document.getElementById('regular').value
-    }
-    const getId = projectsArray.length;
-    const project = Project(getType, getName, getId);
+    const name = getName();
+    const type = getType();
+    const projectId = projectsArray.length;
+    const project = Project(type, name, projectId);
     
     return project
 }
@@ -38,7 +28,8 @@ const addProjectToList = (project) => {
 }
 
 const chooseTaskForm = () => {
-    const projectSelected = document.getElementsByClassName('project selected')[0]
+    const projectSelected = getProjectNode();
+
     if (projectSelected.className.includes('quick')) {
         quickTaskForm();
     } else if (projectSelected.className.includes('regular')) {
@@ -49,11 +40,11 @@ const chooseTaskForm = () => {
 }
 
 const getInfoNewQuickList = () => {
-    const getDueDate = document.getElementById('dueDate').value;
+    const dueDate = getDueDate();
     const getList = quickList.map(item => item);
-    const getId = tasksArray.length;
-    const getProject = document.getElementsByClassName('selected')[0].textContent
-    const quickTask = QuickTask(getDueDate, getList, getProject, getId)
+    const taskId = tasksArray.length;
+    const currentProject = getProjectName();
+    const quickTask = QuickTask(dueDate, getList, currentProject, taskId)
 
     return quickTask
 }
@@ -72,13 +63,13 @@ const addQuickTaskToList = (task) => {
 }
 
 const getInfoNewRegularTask = () => {
-    const getName = document.getElementById('name').value;
-    const getDueDate = document.getElementById('dueDate').value;
-    const getDescription = document.getElementById('description').value;
-    const getPriority = document.getElementById('priority').value;
-    const getProject = document.getElementsByClassName('selected')[0].textContent
-    const getId = tasksArray.length;
-    const regularTask = RegularTask(getName, getDueDate, getDescription, getProject, getPriority, getId)
+    const name = getName();
+    const dueDate = getDueDate();
+    const desc = getDescription();
+    const priority = getPriority();
+    const currentProject = getProjectName();
+    const taskId = tasksArray.length;
+    const regularTask = RegularTask(name, dueDate, desc, currentProject, priority, taskId)
 
     return regularTask
 }
@@ -110,4 +101,4 @@ const initiatePage = (() => {
 addProject.addEventListener('click', projectForm);
 addToDo.addEventListener('click', chooseTaskForm);
 
-export { getInfoNewProject, addProjectToList, getInfoNewQuickList, addItemToList, addQuickTaskToList, getInfoNewRegularTask, addRegularTaskToList, quickListProjects, postitProjects, taskContainer }
+export { getInfoNewProject, addProjectToList, getInfoNewQuickList, addItemToList, addQuickTaskToList, getInfoNewRegularTask, addRegularTaskToList }

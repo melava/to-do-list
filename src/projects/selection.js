@@ -1,4 +1,4 @@
-import { quickListProjects, postitProjects } from '../index'
+import { quickListProjects, postitProjects } from '../DOMGlobalManipulations'
 import { filterTasks } from '../tasks/filter'
 
 const isProjectSelected = (e) => {

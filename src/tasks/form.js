@@ -1,7 +1,6 @@
+import { container, clearInput, closeOverlay } from '../DOMGlobalManipulations'
 import { addItemToList, getInfoNewQuickList, addQuickTaskToList, getInfoNewRegularTask, addRegularTaskToList } from '../index.js'
 import { printAddedItem, printQuickTask, printRegularTask } from './print'
-
-const container = document.getElementById('content-container');
 
 const quickTaskForm = () => {
     const overlay = document.createElement('div');
@@ -171,17 +170,6 @@ const regularTaskForm = () => {
             inputName.focus();
         }
     })
-}
-
-
-const closeOverlay = () => {
-    const overlay = document.getElementById('form-overlay');
-    container.removeChild(overlay);
-}
-
-const clearInput = (input) => {
-    input.value = '';
-    input.focus()
 }
 
 export { quickTaskForm, regularTaskForm }

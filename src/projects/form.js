@@ -1,7 +1,6 @@
+import { container, closeOverlay } from '../DOMGlobalManipulations'
 import { getInfoNewProject, addProjectToList } from '../index'
 import { printProject } from './print'
-
-const container = document.getElementById('content-container');
 
 const projectForm = () => {
     const overlay = document.createElement('div');
@@ -70,11 +69,6 @@ const projectForm = () => {
             inputName.focus();
         }
     })
-}
-
-const closeOverlay = () => {
-    const overlay = document.getElementById('form-overlay');
-    container.removeChild(overlay);
 }
 
 export { projectForm, closeOverlay }
