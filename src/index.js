@@ -10,7 +10,6 @@ let projectsArray = [];
 let quickList = [];
 let tasksArray = [];
 
-//get project info
 const getInfoNewProject = () => {
     const name = getName();
     const type = getType();
@@ -20,7 +19,6 @@ const getInfoNewProject = () => {
     return project
 }
 
-//add project to the list
 const addProjectToList = (project) => {
     projectsArray.push(project);
     
