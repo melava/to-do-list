@@ -5,14 +5,36 @@ const taskContainer = document.getElementById('task-container')
 const addProject = document.getElementById('add-project');
 const addToDo = document.getElementById('add-todo');
 
-const getName = () => document.getElementById('name').value;
-const getItem = () => document.getElementById('item').value;
-const getItemNode = () => document.getElementById('item');
-const getDueDate = () => document.getElementById('dueDate').value;
-const getDescription = () => document.getElementById('description').value;
-const getPriority = () => document.getElementById('priority').value;
-const getProjectName = () => document.getElementsByClassName('selected')[0].textContent;
-const getProjectNode = () => document.getElementsByClassName('selected')[0];
+const getName = () => {
+    const value = document.getElementById('name').value;
+    const node = document.getElementById('name');
+    return { value, node }
+}
+const getItem = () => {
+    const value = document.getElementById('item').value;
+    const node = document.getElementById('item');
+    return { value, node }
+}
+const getDueDate = () => {
+    const value = document.getElementById('dueDate').value;
+    const node = document.getElementById('dueDate');
+    return { value, node }
+}
+const getDescription = () => {
+    const value = document.getElementById('description').value;
+    const node = document.getElementById('description');
+    return { value, node }
+}
+const getPriority = () => {
+    const value = document.getElementById('priority').value;
+    const node = document.getElementById('priority');
+    return { value, node }
+}
+const getProject = () => {
+    const value = document.getElementsByClassName('selected')[0].textContent;
+    const node = document.getElementsByClassName('selected')[0];
+    return { value, node }
+}
 const getSubmitButton = () => document.getElementById('submit');
 const getAddItemButton = () => document.getElementById('add-item');
 const getType = () => {
@@ -22,7 +44,6 @@ const getType = () => {
     } else if (document.getElementById('regular').checked) {
         type = document.getElementById('regular').value
     }
-
     return type
 }
 
@@ -169,5 +190,5 @@ const clearInput = (input) => {
 }
 
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
-export { getName, getItem, getItemNode, getDueDate, getDescription, getPriority, getProjectName, getProjectNode, getType, getSubmitButton, getAddItemButton }
+export { getName, getItem, getDueDate, getDescription, getPriority, getProject, getType, getSubmitButton, getAddItemButton }
 export { clearInput, closeOverlay, formFactory }

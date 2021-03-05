@@ -1,6 +1,6 @@
-import { container, clearInput, closeOverlay, formFactory, getSubmitButton, getAddItemButton, getItem, getItemNode } from '../DOMGlobalManipulations'
-import { addItemToList, getInfoNewQuickList, addQuickTaskToList, getInfoNewRegularTask, addRegularTaskToList } from '../index.js'
-import { printAddedItem, printQuickTask, printRegularTask } from './print'
+import { container, clearInput, formFactory, getSubmitButton, getAddItemButton, getItem, getName } from '../DOMGlobalManipulations'
+import { addItemToList, dispatchSubmit } from '../index.js'
+import { printAddedItem } from './print'
 
 const quickTaskForm = () => {
     const form = formFactory();
@@ -14,32 +14,22 @@ const quickTaskForm = () => {
     const overlay = form.createOverlay('quicklist', [dueDateContainer, textContainer, ul, submitContainer]);
     container.appendChild(overlay);
 
-    getItemNode().focus();
+    getItem().node.focus();
     
     const addItem = getAddItemButton();
     addItem.addEventListener('click', () => { 
-        if (getItem()) {
-            addItemToList(getItem()); 
-            printAddedItem(getItem());
-            clearInput(getItemNode())
+        if (getItem().value) {
+            addItemToList(getItem().value); 
+            printAddedItem(getItem().value);
+            clearInput(getItem().node)
         } else {
             console.log('error: empty item');
-            getItemNode().focus();
+            getItem().node.focus();
         }
     })
     
     const submitButton = getSubmitButton();
-    submitButton.addEventListener('click', () => { 
-        let quickList = getInfoNewQuickList(); 
-        if (quickList.list.length > 0) {
-            addQuickTaskToList(quickList); 
-            printQuickTask(quickList); 
-            closeOverlay() 
-        } else {
-            console.log('error : empty list');
-            getItemNode().focus();
-        }
-    })
+    submitButton.addEventListener('click', dispatchSubmit)
 }
 
 const regularTaskForm = () => {
@@ -54,20 +44,10 @@ const regularTaskForm = () => {
     const overlay = form.createOverlay('regular', [textContainer, textareaContainer, dueDateContainer, priorityContainer, submitContainer]);
     container.appendChild(overlay);
     
-    textContainer.lastChild.focus()
+    getName().node.focus()
         
     const submitButton = getSubmitButton();
-    submitButton.addEventListener('click', () => { 
-        let regularTask = getInfoNewRegularTask(); 
-        if (regularTask.name) {
-            addRegularTaskToList(regularTask); 
-            printRegularTask(regularTask); 
-            closeOverlay() 
-        } else {
-            console.log('error: no name');
-            textContainer.lastChild.focus();
-        }
-    })
+    submitButton.addEventListener('click', dispatchSubmit)
 }
 
 export { quickTaskForm, regularTaskForm }
