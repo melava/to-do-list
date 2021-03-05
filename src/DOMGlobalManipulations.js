@@ -26,15 +26,6 @@ const getType = () => {
     return type
 }
 
-const createOverlay = () => {
-    const overlay = document.createElement('div');
-    overlay.id = 'form-overlay';
-    const formContainer = document.createElement('div');
-    formContainer.classList.add('form');
-    overlay.appendChild(formContainer)
-    
-    return overlay
-}
 
 const formFactory = () => {
     const _container = () => {
@@ -93,6 +84,20 @@ const formFactory = () => {
         return submit
     }
     
+    const createOverlay = (formType, children) => {
+        const overlay = document.createElement('div');
+        overlay.id = 'form-overlay';
+        const formContainer = document.createElement('div');
+        formContainer.classList.add('form');
+        formContainer.classList.add(formType);
+        children.forEach(div => {
+            formContainer.appendChild(div)
+        });
+        overlay.appendChild(formContainer)
+        
+        return overlay
+    }
+
     const containerConstructor = (type, name, content, options) => {
         const container = _container();
         let label;
@@ -111,17 +116,17 @@ const formFactory = () => {
                 container.appendChild(input2);
                 container.appendChild(label2);
                 break;
-            case 'text':
-                input = _textInput(name);
-                label = _label(name, content);
-                container.appendChild(label);
-                container.appendChild(input);
-                if (name === 'item') {
-                    const addItem = _button('add-item', '+');
-                    addItem.classList.add('button');
-                    container.appendChild(addItem);
-                }
-                break;
+                case 'text':
+                    input = _textInput(name);
+                    label = _label(name, content);
+                    container.appendChild(label);
+                    container.appendChild(input);
+                    if (name === 'item') {
+                        const addItem = _button('add-item', '+');
+                        addItem.classList.add('button');
+                        container.appendChild(addItem);
+                    }
+                    break;
             case 'date':
                 input = _dateInput(name);
                 input.value = new Date().toISOString().substr(0,10);
@@ -150,7 +155,7 @@ const formFactory = () => {
         return container
     }
     
-    return { containerConstructor }
+    return { containerConstructor, createOverlay }
 }
 
 const closeOverlay = () => {
@@ -165,4 +170,4 @@ const clearInput = (input) => {
 
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
 export { getName, getItem, getItemNode, getDueDate, getDescription, getPriority, getProjectName, getProjectNode, getType, getSubmitButton, getAddItemButton }
-export { clearInput, createOverlay, closeOverlay, formFactory }
+export { clearInput, closeOverlay, formFactory }
