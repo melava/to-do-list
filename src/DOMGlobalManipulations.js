@@ -5,48 +5,59 @@ const taskContainer = document.getElementById('task-container')
 const addProject = document.getElementById('add-project');
 const addToDo = document.getElementById('add-todo');
 
-const getName = () => {
-    const value = document.getElementById('name').value;
-    const node = document.getElementById('name');
-    return { value, node }
-}
-const getItem = () => {
-    const value = document.getElementById('item').value;
-    const node = document.getElementById('item');
-    return { value, node }
-}
-const getDueDate = () => {
-    const value = document.getElementById('dueDate').value;
-    const node = document.getElementById('dueDate');
-    return { value, node }
-}
-const getDescription = () => {
-    const value = document.getElementById('description').value;
-    const node = document.getElementById('description');
-    return { value, node }
-}
-const getPriority = () => {
-    const value = document.getElementById('priority').value;
-    const node = document.getElementById('priority');
-    return { value, node }
-}
-const getProject = () => {
-    const value = document.getElementsByClassName('selected')[0].textContent;
-    const node = document.getElementsByClassName('selected')[0];
-    return { value, node }
-}
-const getSubmitButton = () => document.getElementById('submit');
-const getAddItemButton = () => document.getElementById('add-item');
-const getType = () => {
-    let type
-    if (document.getElementById('quick').checked) {
-        type = document.getElementById('quick').value
-    } else if (document.getElementById('regular').checked) {
-        type = document.getElementById('regular').value
+const getter = () => {
+    const name = () => {
+        const value = document.getElementById('name').value;
+        const node = document.getElementById('name');
+        return { value, node }
     }
-    return type
-}
+    const type = () => {
+        let value;
+        let node;
+        if (document.getElementById('quick').checked) {
+            value = document.getElementById('quick').value;
+            node = document.getElementById('quick');
+        } else if (document.getElementById('regular').checked) {
+            value = document.getElementById('regular').value;
+            node = document.getElementById('regular');
+    
+        }
+        return { value, node }
+    }
+    const item = () => {
+        const value = document.getElementById('item').value;
+        const node = document.getElementById('item');
+        return { value, node }
+    }
+    const dueDate = () => {
+        const value = document.getElementById('dueDate').value;
+        const node = document.getElementById('dueDate');
+        return { value, node }
+    }
+    const description = () => {
+        const value = document.getElementById('description').value;
+        const node = document.getElementById('description');
+        return { value, node }
+    }
+    const priority = () => {
+        const value = document.getElementById('priority').value;
+        const node = document.getElementById('priority');
+        return { value, node }
+    }
+    const project = () => {
+        const value = document.getElementsByClassName('selected')[0].textContent;
+        const node = document.getElementsByClassName('selected')[0];
+        return { value, node }
+    }
+    // const _Task = (index) => {
+    //     const node = document.getElementsByClassName('task')[index];
+    //     return { node }
+    // }
+    const submitButton = () => document.getElementById('submit');
+    const addItemButton = () => document.getElementById('add-item');
 
+    return { name, type, item, dueDate, description, priority, project, submitButton, addItemButton }
+}
 
 const formFactory = () => {
     const _container = () => {
@@ -189,6 +200,7 @@ const clearInput = (input) => {
     input.focus()
 }
 
+const get = getter();
+
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
-export { getName, getItem, getDueDate, getDescription, getPriority, getProject, getType, getSubmitButton, getAddItemButton }
-export { clearInput, closeOverlay, formFactory }
+export { clearInput, closeOverlay, formFactory, get }

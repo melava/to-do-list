@@ -1,4 +1,4 @@
-import { container, clearInput, formFactory, getSubmitButton, getAddItemButton, getItem, getName } from '../DOMGlobalManipulations'
+import { container, clearInput, formFactory, get } from '../DOMGlobalManipulations'
 import { addItemToList, dispatchSubmit } from '../index.js'
 import { printAddedItem } from './print'
 
@@ -14,21 +14,21 @@ const quickTaskForm = () => {
     const overlay = form.createOverlay('quicklist', [dueDateContainer, textContainer, ul, submitContainer]);
     container.appendChild(overlay);
 
-    getItem().node.focus();
+    get.item().node.focus();
     
-    const addItem = getAddItemButton();
+    const addItem = get.addItemButton();
     addItem.addEventListener('click', () => { 
-        if (getItem().value) {
-            addItemToList(getItem().value); 
-            printAddedItem(getItem().value);
-            clearInput(getItem().node)
+        if (get.item().value) {
+            addItemToList(get.item().value); 
+            printAddedItem(get.item().value);
+            clearInput(get.item().node)
         } else {
             console.log('error: empty item');
-            getItem().node.focus();
+            get.item().node.focus();
         }
     })
     
-    const submitButton = getSubmitButton();
+    const submitButton = get.submitButton();
     submitButton.addEventListener('click', dispatchSubmit)
 }
 
@@ -44,9 +44,9 @@ const regularTaskForm = () => {
     const overlay = form.createOverlay('regular', [textContainer, textareaContainer, dueDateContainer, priorityContainer, submitContainer]);
     container.appendChild(overlay);
     
-    getName().node.focus()
+    get.name().node.focus()
         
-    const submitButton = getSubmitButton();
+    const submitButton = get.submitButton();
     submitButton.addEventListener('click', dispatchSubmit)
 }
 

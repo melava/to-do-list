@@ -1,4 +1,4 @@
-import { container, formFactory, getName, getSubmitButton } from '../DOMGlobalManipulations'
+import { container, formFactory, get } from '../DOMGlobalManipulations'
 import { dispatchSubmit } from '../index'
 
 const projectForm = () => {
@@ -11,9 +11,9 @@ const projectForm = () => {
     const overlay = form.createOverlay('project', [radioContainer, textContainer, submitContainer]);
     container.appendChild(overlay);
     
-    getName().node.focus()
+    get.name().node.focus()
     
-    const submitButton = getSubmitButton();
+    const submitButton = get.submitButton();
     submitButton.addEventListener('click', dispatchSubmit)
 }
 
