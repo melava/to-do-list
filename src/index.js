@@ -1,8 +1,9 @@
 import { addProject, addToDo, get, closeOverlay } from './DOMGlobalManipulations'
 import { Project } from './projects/factory'
 import { projectForm } from './projects/form'
-import { printProject} from './projects/print'
+import { printProject, unPrintProject } from './projects/print'
 import { QuickTask, RegularTask } from './tasks/factory'
+import { filterTasks } from './tasks/filter'
 import { quickTaskForm, regularTaskForm } from './tasks/form'
 import { printQuickTask, printRegularTask } from './tasks/print'
 
@@ -27,6 +28,43 @@ const getFormInfos = (formType) => {
         const type = get.type().value;
         const projectId = projectsArray.length;
         const project = Project(type, name, projectId);
+        return project
+    } else if (formType === 'quicklist') {
+        const dueDate = get.dueDate().value;
+        const getList = quickList.map(item => item);
+        const taskId = tasksArray.length;
+        const currentProject = get.project().value;
+        const project = QuickTask(dueDate, getList, currentProject, taskId)
+        return project
+    } else if (formType === 'regular') {
+        const name = get.name().value;
+        const dueDate = get.dueDate().value;
+        const desc = get.description().value;
+        const priority = get.priority().value;
+        const currentProject = get.project().value;
+        const taskId = tasksArray.length;
+        const project = RegularTask(name, dueDate, desc, currentProject, priority, taskId)
+        return project
+    }
+}
+
+const updateInfos = (formType, index) => {
+    if (formType === 'project') {
+        projectsArray[index].name = get.name().value;
+        projectsArray[index].type = get.type().value;
+        const project = Project(projectsArray[index].type, projectsArray[index].name, index)
+        tasksArray.forEach(task => {
+            if (task.project === '') {
+                task.project = project.name;
+                const allTasks = Array.from(get.allTasks());
+                allTasks.forEach(taskNode => {
+                    if (taskNode.dataset.project === '') {
+                        taskNode.dataset.project = project.name;
+                    }
+                });
+                console.log(allTasks)
+            }
+        });
         return project
     } else if (formType === 'quicklist') {
         const dueDate = get.dueDate().value;
@@ -76,6 +114,16 @@ const print = (formType, object) => {
     }
 }
 
+const unPrint = (formType, object) => {
+    if (formType === 'project') {
+        unPrintProject();
+    } else if (formType === 'quicklist') {
+        // printQuickTask(object);
+    } else if (formType === 'regular') {
+        // printRegularTask(object);
+    }
+}
+
 const checkValidity = (formType, object) => {
     let validity;
     if (formType === 'project') {
@@ -106,6 +154,23 @@ const dispatchSubmit = (e) => {
     }
 }
 
+const dispatchUpdate = (e) => {
+    const formType = e.target.closest('div.form').className.replace('form', '').trim();
+    const object = updateInfos(formType, get.project().node.dataset.index);
+    const valid = checkValidity(formType, object);
+    if (valid) {
+        unPrint(formType, object);
+        print(formType, object);
+        closeOverlay();
+        console.log(projectsArray)
+        console.log(tasksArray)
+    } else {
+        console.log('invalid');
+        
+        formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
+    }
+}
+
 // ----------------------------------CALLS
 // add some prototype project and tasks to start the page
 const initiatePage = (() => {
@@ -122,8 +187,8 @@ const initiatePage = (() => {
     printProject(protoQuick);
     printProject(protoReg);
 })();
-addProject.addEventListener('click', projectForm);
+addProject.addEventListener('click', () => { projectForm('new') });
 addToDo.addEventListener('click', chooseTaskForm);
 
 export { projectsArray, tasksArray }
-export { addItemToList, dispatchSubmit }
+export { addItemToList, dispatchSubmit, dispatchUpdate }

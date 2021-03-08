@@ -1,4 +1,4 @@
-import { quickListProjects, postitProjects } from '../DOMGlobalManipulations'
+import { quickListProjects, postitProjects, get } from '../DOMGlobalManipulations'
 import { isProjectSelected, toggleSelectedProject } from './selection'
 import { filterTasks } from '../tasks/filter'
 
@@ -16,4 +16,8 @@ const printProject = (project) => {
     card.addEventListener('click', isProjectSelected);
 };
 
-export { printProject }
+const unPrintProject = () => {
+    get.project().node.parentNode.removeChild(get.project().node)
+}
+
+export { printProject, unPrintProject }

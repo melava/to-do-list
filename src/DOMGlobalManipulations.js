@@ -49,14 +49,29 @@ const getter = () => {
         const node = document.getElementsByClassName('selected')[0];
         return { value, node }
     }
-    // const _Task = (index) => {
-    //     const node = document.getElementsByClassName('task')[index];
-    //     return { node }
-    // }
+    const allTasks = () => {
+        const tasks = document.getElementsByClassName('task');
+        return tasks
+    }
     const submitButton = () => document.getElementById('submit');
     const addItemButton = () => document.getElementById('add-item');
 
-    return { name, type, item, dueDate, description, priority, project, submitButton, addItemButton }
+    return { name, type, item, dueDate, description, priority, project, allTasks, submitButton, addItemButton }
+}
+
+const setter = () => {
+    const type = (value) => {
+        const newType = document.getElementById(value);
+        newType.checked = true
+    }
+
+    const name = (value) => {
+        get.name().node.value = value
+    }
+
+
+
+    return { type, name }
 }
 
 const formFactory = () => {
@@ -201,6 +216,7 @@ const clearInput = (input) => {
 }
 
 const get = getter();
+const set = setter();
 
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
-export { clearInput, closeOverlay, formFactory, get }
+export { clearInput, closeOverlay, formFactory, get, set }
