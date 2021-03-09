@@ -135,21 +135,36 @@ textarea {
 
 #projects-container .selected {
     font-style: italic;
-    padding-left: 15px;
-    position: relative;
 }
 
-#projects-container .selected::before {
-    content: '> ';
+#projects-container .project > div {
+    display: inline;
 }
 
-#projects-container .selected::after {
-    content: 'edit';
-    font-size: 10px;
-    text-transform: uppercase;
-    position: relative;
-    right: -15px
+#projects-container .project > button {
+    background-color: rgb(48, 48, 163);
+    border: 1px solid navy;
+    margin: 0 10px;
+    color: white;
+    font-size: 15px;
 }
+
+#projects-container .selected input {
+    height: 19px;
+    box-sizing: border-box;
+}
+
+/* #projects-container .selected::before {
+    content: '☐';
+    padding-right: 10px;
+    font-style: normal;
+} */
+
+/* #projects-container .selected::after {
+    content: '🖉';
+    padding: 0px 10px;
+    font-style: normal;
+} */
 
 /* ---------------TASKS COLUMN--------------- */
 #todos-container {
