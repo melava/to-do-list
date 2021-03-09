@@ -1,7 +1,8 @@
 import { addProject, addToDo, get, closeOverlay } from './DOMGlobalManipulations'
 import { Project } from './projects/factory'
 import { projectForm } from './projects/form'
-import { printProject, unPrintProject } from './projects/print'
+import { printProject, unPrintProject, editPrint } from './projects/print'
+import { isProjectSelected } from './projects/selection'
 import { QuickTask, RegularTask } from './tasks/factory'
 import { filterTasks } from './tasks/filter'
 import { quickTaskForm, regularTaskForm } from './tasks/form'
@@ -50,21 +51,22 @@ const getFormInfos = (formType) => {
 
 const updateInfos = (formType, index) => {
     if (formType === 'project') {
+        const oldName = projectsArray[index].name;
         projectsArray[index].name = get.name().value;
-        projectsArray[index].type = get.type().value;
         const project = Project(projectsArray[index].type, projectsArray[index].name, index)
         tasksArray.forEach(task => {
-            if (task.project === '') {
+            if (task.project === oldName) {
                 task.project = project.name;
                 const allTasks = Array.from(get.allTasks());
                 allTasks.forEach(taskNode => {
-                    if (taskNode.dataset.project === '') {
+                    if (taskNode.dataset.project === oldName) {
                         taskNode.dataset.project = project.name;
                     }
                 });
-                console.log(allTasks)
+                // console.log(allTasks)
             }
         });
+        // console.log(tasksArray)
         return project
     } else if (formType === 'quicklist') {
         const dueDate = get.dueDate().value;
@@ -116,7 +118,7 @@ const print = (formType, object) => {
 
 const unPrint = (formType, object) => {
     if (formType === 'project') {
-        unPrintProject();
+        unPrintProject(object);
     } else if (formType === 'quicklist') {
         // printQuickTask(object);
     } else if (formType === 'regular') {
@@ -155,15 +157,22 @@ const dispatchSubmit = (e) => {
 }
 
 const dispatchUpdate = (e) => {
-    const formType = e.target.closest('div.form').className.replace('form', '').trim();
-    const object = updateInfos(formType, get.project().node.dataset.index);
+    const elementToUpdate = () => {
+        if (e.target.parentNode.className.includes('project')) {
+            const index = e.target.parentNode.dataset.index;
+            const type = 'project';
+            return { type, index }
+        }
+    }
+    const formType = elementToUpdate().type;
+    const index = elementToUpdate().index;
+    
+    const object = updateInfos(formType, index);
     const valid = checkValidity(formType, object);
     if (valid) {
-        unPrint(formType, object);
-        print(formType, object);
-        closeOverlay();
-        console.log(projectsArray)
-        console.log(tasksArray)
+        const parentNode = e.target.parentNode
+        unPrint(formType, parentNode);
+        editPrint(object, parentNode);
     } else {
         console.log('invalid');
         
@@ -187,8 +196,10 @@ const initiatePage = (() => {
     printProject(protoQuick);
     printProject(protoReg);
 })();
+document.onload = initiatePage;
 addProject.addEventListener('click', () => { projectForm('new') });
 addToDo.addEventListener('click', chooseTaskForm);
 
+// document.addEventListener('click', (e) => {if (e.clientX < 30 && e.target.className.includes('project')) {console.log(e)}})
 export { projectsArray, tasksArray }
 export { addItemToList, dispatchSubmit, dispatchUpdate }

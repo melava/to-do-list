@@ -45,7 +45,7 @@ const getter = () => {
         return { value, node }
     }
     const project = () => {
-        const value = document.getElementsByClassName('selected')[0].textContent;
+        const value = document.getElementsByClassName('selected')[0].children[0].textContent;
         const node = document.getElementsByClassName('selected')[0];
         return { value, node }
     }

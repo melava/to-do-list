@@ -4,11 +4,14 @@ import { editProjectForm } from '../projects/edit'
 
 
 const isProjectSelected = (e) => {
-    if (e.target.className.includes('selected')) {
-        editProjectForm(e.target.dataset.index)
-    } else {
+    const projectNode = e.target.closest('div.project');
+    if (!projectNode) { 
+        return 
+    } else if (projectNode.className.includes('selected') && projectNode.childNodes[0].tagName === 'DIV') {
+        editProjectForm(projectNode.childNodes[0])
+    } else if (!projectNode.className.includes('selected')) {
         toggleSelectedProject();
-        e.target.classList.add('selected');
+        projectNode.classList.add('selected');
         filterTasks();
     }
 }

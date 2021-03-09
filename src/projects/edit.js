@@ -1,22 +1,16 @@
-import { projectsArray, tasksArray } from '../index'
-import { get, set } from '../DOMGlobalManipulations'
+import { projectsArray, tasksArray, dispatchUpdate } from '../index'
+import { formFactory, get, set } from '../DOMGlobalManipulations'
 import { projectForm } from './form'
 
-const editProjectForm = (index) => {
-    projectForm('change', index);
-    set.type(projectsArray[index].type);
-    set.name(projectsArray[index].name);
-    tasksArray.forEach(task => {
-        if (task.project === projectsArray[index].name) {
-            const allTasks = Array.from(get.allTasks())
-            allTasks.forEach(taskNode => {
-                if (taskNode.dataset.project === task.project) {
-                    taskNode.dataset.project = '';
-                }
-            });
-            task.project = ''
-        }
-    });
+const editProjectForm = (node) => {
+    const submit = node.nextSibling;
+    const input = document.createElement('input');
+    input.id = 'name';
+    input.value = node.textContent;
+    node.parentNode.prepend(input);
+    node.parentNode.removeChild(node)
+    input.focus();
+    submit.addEventListener('click', dispatchUpdate)
 }
 
 export { editProjectForm }
