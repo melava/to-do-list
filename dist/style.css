@@ -123,35 +123,59 @@ textarea {
     box-sizing: border-box;
     padding: 25px 10px;
     flex-grow: 0;
-    width: 290px;
+    width: 320px;
     background-color: rgb(132, 173, 235);
 }
 
 #projects-container .project {
     box-sizing: border-box;
     margin: 10px 0;
-    padding: 8px 5px;
+    padding: 8px 0px;
 }
 
 #projects-container .selected {
     font-style: italic;
 }
 
+#projects-container .done .completed-ballot {
+    text-decoration-line: none;
+}
+
+#projects-container .done .completed-ballot::after {
+    content: 'V';
+    display: block;
+    text-align: center;
+}
+
+#projects-container .done > div {
+    text-decoration-line: line-through;
+}
+
 #projects-container .project > div {
-    display: inline;
+    display: inline-block;
+    margin: 3px 10px;
+}
+
+#projects-container .project .ballot {
+    display: inline-block;
+    vertical-align: text-top;
+    width: 18px;
+    height: 18px;
+    margin: 0px;
+    border: 1px solid navy;
+    font-size: 15px;
 }
 
 #projects-container .project > button {
     background-color: rgb(48, 48, 163);
     border: 1px solid navy;
-    margin: 0 10px;
     color: white;
     font-size: 15px;
 }
 
 #projects-container .selected input {
-    height: 19px;
     box-sizing: border-box;
+    margin: 0px 10px;
 }
 
 /* #projects-container .selected::before {

@@ -9,11 +9,14 @@ const printProject = (project) => {
     card.classList.add('project');
     card.classList.add(project.type);
     card.setAttribute('data-index', project.id);
+    const ballot = document.createElement('div');
+    ballot.classList.add('ballot');
+    card.appendChild(ballot);
     const content = document.createElement('div');
     content.textContent = `${project.name}`;
     card.appendChild(content);
     const action = document.createElement('button');
-    action.classList.add('projectAction');
+    action.classList.add('project-action');
     action.textContent = '🖉';
     card.appendChild(action);
     project.type === 'quick' ? quickListProjects.appendChild(card) : postitProjects.appendChild(card);
@@ -29,16 +32,14 @@ const editPrint = (project, node) => {
     content.textContent = `${project.name}`;
     card.appendChild(content);
     const action = document.createElement('button');
-    action.classList.add('projectAction');
+    action.classList.add('project-action');
     action.textContent = '🖉';
     card.appendChild(action);
-    toggleSelectedProject();
-    card.classList.add('selected');
-    filterTasks();
+
 };
 
 const unPrintProject = (object) => {
-    let buttons = Array.from(document.getElementsByClassName('projectAction'));
+    let buttons = Array.from(document.getElementsByClassName('project-action'));
     const button = () => {
         let aButton
         buttons.forEach(button => {

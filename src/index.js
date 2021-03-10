@@ -13,13 +13,15 @@ let quickList = [];
 let tasksArray = [];
 
 const chooseTaskForm = () => {
-    const projectSelected = get.project().node;
-    if (projectSelected.className.includes('quick')) {
-        quickTaskForm();
-    } else if (projectSelected.className.includes('regular')) {
-        regularTaskForm();
-    } else {
-        console.log('ho no, there isn\'t any project selected!')
+    if (!document.getElementById('name')) {
+        const projectSelected = get.project().node;
+        if (projectSelected.className.includes('quick')) {
+            quickTaskForm();
+        } else if (projectSelected.className.includes('regular')) {
+            regularTaskForm();
+        } else {
+            console.log('ho no, there isn\'t any project selected!')
+        }
     }
 }
 
@@ -196,7 +198,6 @@ const initiatePage = (() => {
     printProject(protoQuick);
     printProject(protoReg);
 })();
-document.onload = initiatePage;
 addProject.addEventListener('click', () => { projectForm('new') });
 addToDo.addEventListener('click', chooseTaskForm);
 
