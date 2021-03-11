@@ -139,12 +139,17 @@ textarea {
 
 #projects-container .done .completed-ballot {
     text-decoration-line: none;
+    opacity: 80%;
 }
 
 #projects-container .done .completed-ballot::after {
-    content: 'V';
+    content: '√';
     display: block;
     text-align: center;
+    font-size: 25px;
+    top: -8px;
+    position: relative;
+    color: navy;
 }
 
 #projects-container .done > div {
