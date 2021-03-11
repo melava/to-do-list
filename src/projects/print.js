@@ -1,7 +1,5 @@
 import { quickListProjects, postitProjects, get } from '../DOMGlobalManipulations'
-import { isProjectSelected, toggleSelectedProject } from './selection'
-import { filterTasks } from '../tasks/filter'
-import { editProjectForm } from './edit';
+import { toggleSelectedProject } from './selection'
 
 
 const printProject = (project) => {
@@ -20,10 +18,7 @@ const printProject = (project) => {
     action.textContent = '🖉';
     card.appendChild(action);
     project.type === 'quick' ? quickListProjects.appendChild(card) : postitProjects.appendChild(card);
-    toggleSelectedProject();
-    card.classList.add('selected');
-    filterTasks();
-    card.addEventListener('click', isProjectSelected);
+    toggleSelectedProject(card);
 };
 
 const editPrint = (project, node) => {
@@ -35,7 +30,6 @@ const editPrint = (project, node) => {
     action.classList.add('project-action');
     action.textContent = '🖉';
     card.appendChild(action);
-
 };
 
 const unPrintProject = (object) => {

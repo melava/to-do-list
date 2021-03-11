@@ -1,33 +1,14 @@
-import { container, formFactory, get } from '../DOMGlobalManipulations'
-import { dispatchSubmit, dispatchUpdate } from '../index'
+import { container, get, showForm } from '../DOMGlobalManipulations'
 
-const projectForm = (action) => {
-    if (!document.getElementById('name')) {
-        const form = formFactory();
-        const actionContent = () => {
-            if (action === 'new') {
-                return 'New Project'
-            } else if (action === 'change') {
-                return 'Update project'
-            }
-        }
-
-        const radioContainer = form.containerConstructor('radio', ['regular', 'quick'], ['Regular task', 'Quick list task']);
-        const textContainer = form.containerConstructor('text', 'name', 'Project name');
-        const submitContainer = form.containerConstructor('submit', 'submit', actionContent());
-        
-        const overlay = form.createOverlay('project', [radioContainer, textContainer, submitContainer]);
-        container.appendChild(overlay);
-        
-        get.name().node.focus()
-        
-        const submitButton = get.submitButton();
-        if (action === 'new') {
-            submitButton.addEventListener('click', dispatchSubmit)
-        } else if (action === 'change') {
-            submitButton.addEventListener('click', dispatchUpdate)
-        }
-    }
+const projectForm = () => {
+    const radioContainer = showForm.containerConstructor('radio', ['regular', 'quick'], ['Regular task', 'Quick list task']);
+    const textContainer = showForm.containerConstructor('text', 'name', 'Project name');
+    const submitContainer = showForm.containerConstructor('submit', 'submit', 'New Project');
+    
+    const overlay = showForm.createOverlay('project-form', [radioContainer, textContainer, submitContainer]);
+    container.appendChild(overlay);
+    
+    get.name().node.focus()
 }
 
 export { projectForm }

@@ -68,12 +68,12 @@ h4 {
     align-content: space-evenly;
 }
 
-#form-overlay .quicklist {
+#form-overlay .quicklist-form {
     height: auto;
     min-height: 250px ;
 }
 
-#form-overlay .regular {
+#form-overlay .regular-form {
     height: 400px;
 }
 

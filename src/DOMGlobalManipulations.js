@@ -5,7 +5,7 @@ const taskContainer = document.getElementById('task-container')
 const addProject = document.getElementById('add-project');
 const addToDo = document.getElementById('add-todo');
 
-const getter = () => {
+const _getter = () => {
     const name = () => {
         const value = document.getElementById('name').value;
         const node = document.getElementById('name');
@@ -45,7 +45,7 @@ const getter = () => {
         return { value, node }
     }
     const project = () => {
-        const value = document.getElementsByClassName('selected')[0].children[0].textContent;
+        const value = document.getElementsByClassName('selected')[0].children[1].textContent;
         const node = document.getElementsByClassName('selected')[0];
         return { value, node }
     }
@@ -59,7 +59,7 @@ const getter = () => {
     return { name, type, item, dueDate, description, priority, project, allTasks, submitButton, addItemButton }
 }
 
-const setter = () => {
+const _setter = () => {
     const type = (value) => {
         const newType = document.getElementById(value);
         newType.checked = true
@@ -74,7 +74,7 @@ const setter = () => {
     return { type, name }
 }
 
-const formFactory = () => {
+const _formFactory = () => {
     const _container = () => {
         const cont = document.createElement('div');
         cont.classList.add('inner-form-container');
@@ -215,8 +215,9 @@ const clearInput = (input) => {
     input.focus()
 }
 
-const get = getter();
-const set = setter();
+const get = _getter();
+const set = _setter();
+const showForm = _formFactory();
 
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
-export { clearInput, closeOverlay, formFactory, get, set }
+export { clearInput, closeOverlay, get, set, showForm }
