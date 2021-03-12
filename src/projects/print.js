@@ -21,7 +21,7 @@ const printProject = (project) => {
     toggleSelectedProject(card);
 };
 
-const editPrint = (project, node) => {
+const printNewProjectName = (project, node) => {
     const card = node;
     const content = document.createElement('div');
     content.textContent = `${project.name}`;
@@ -31,6 +31,15 @@ const editPrint = (project, node) => {
     action.textContent = '🖉';
     card.appendChild(action);
 };
+
+const editTasksProject = (object, oldName) => {
+    const allTasks = Array.from(get.allTasks());
+    allTasks.forEach(taskNode => {
+        if (taskNode.dataset.project === oldName) {
+            taskNode.dataset.project = object.name;
+        }
+    });
+}
 
 const unPrintProject = (object) => {
     let buttons = Array.from(document.getElementsByClassName('project-action'));
@@ -51,4 +60,4 @@ const unPrintProject = (object) => {
     object.removeChild(input);
 }
 
-export { printProject, unPrintProject, editPrint }
+export { printProject, unPrintProject, printNewProjectName, editTasksProject }
