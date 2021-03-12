@@ -1,7 +1,7 @@
-import { get, closeOverlay, clearInput } from './DOMGlobalManipulations'
+import { get, closeOverlay, isDone, clearInput } from './DOMGlobalManipulations'
 import { Project } from './projects/factory'
 import { projectForm } from './projects/form'
-import { isProjectDone, editProjectForm } from './projects/edit'
+import { editProjectForm } from './projects/edit'
 import { printProject, unPrintProject, printNewProjectName, editTasksProject } from './projects/print'
 import { toggleSelectedProject } from './projects/selection'
 import { QuickTask, RegularTask } from './tasks/factory'
@@ -139,17 +139,19 @@ const unPrint = (formType, object) => {
 const clickListener = (e) => {
     const clickedNode = e.target;
     const clickedProject = e.target.closest('div.project');
+    const clickedTask = e.target.closest('div.task');
     const form = e.target.closest('div.form');
     // console.log(clickedNode);
     // console.log(clickedProject);
     // console.log(form);
-    if ((clickedNode.id === 'add-project' || clickedNode.id === 'add-todo') && !document.getElementById('name')) { console.log('add button'), chooseTaskForm(clickedNode) }
+    if ((clickedNode.id === 'add-project' || clickedNode.id === 'add-todo') && !document.getElementById('name')) { console.log('add button'), chooseForm(clickedNode) }
     else if (clickedProject) { console.log('click on project list'), chooseProjectAction(clickedNode, clickedProject) }
     else if (form && clickedNode.id === 'add-item') { console.log('add an item to list'), submitNewItem() }
     else if (form && clickedNode.id === 'submit') { console.log('submit a form'), submitForm(form) }
+    else if (clickedTask) { console.log('clicked on a task'), chooseTaskAction(clickedNode, clickedTask) }
 }
 
-const chooseTaskForm = (target) => {
+const chooseForm = (target) => {
     if (target.id === 'add-project') {
         projectForm();
     } else {
@@ -167,7 +169,7 @@ const chooseTaskForm = (target) => {
 const chooseProjectAction = (target, project) => {
     if (target.className.includes('ballot')) { 
         updateStatus(project.dataset.index);
-        isProjectDone(project);
+        isDone(project, target);
     } else if (target.className.includes('project-action') && !document.getElementById('name')) {
         if (!project.className.includes('selected')) {
             toggleSelectedProject(project);
@@ -182,6 +184,13 @@ const chooseProjectAction = (target, project) => {
             toggleSelectedProject(project);
         }
     }
+}
+
+const chooseTaskAction = (target, task) => {
+    if (target.className.includes('ballot') && target.closest('div#list-container')) { 
+        isDone(target.parentNode, target);
+        // updateStatus(task.dataset.index);
+    } 
 }
 
 const submitNewItem = () => {

@@ -6,10 +6,4 @@ const editProjectForm = (node) => {
     input.focus();
 }
 
-const isProjectDone = (project) => {
-    project.classList.toggle('done');
-    project.firstChild.classList.toggle('completed-ballot')
-}
-
-
-export { editProjectForm, isProjectDone }
+export { editProjectForm }

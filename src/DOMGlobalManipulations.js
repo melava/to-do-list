@@ -215,9 +215,14 @@ const clearInput = (input) => {
     input.focus()
 }
 
+const isDone = (object, target) => {
+    object.classList.toggle('done');
+    target.classList.toggle('completed-ballot')
+}
+
 const get = _getter();
 const set = _setter();
 const showForm = _formFactory();
 
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
-export { clearInput, closeOverlay, get, set, showForm }
+export { clearInput, closeOverlay, isDone, get, set, showForm }

@@ -49,6 +49,41 @@ h4 {
     border-radius: 50%;
 }
 
+.done {
+    opacity: 80%;
+}
+
+.ballot {
+    display: inline-block !important;
+    vertical-align: text-top;
+    width: 18px;
+    height: 18px;
+    margin: 0px;
+    border: 1px solid navy;
+    font-size: 15px;
+}
+
+.done .completed-ballot { 
+    text-decoration-line: none;
+}
+
+.done .completed-ballot::after { 
+    content: '√';
+    display: block;
+    text-align: center;
+    font-style: normal;
+    font-size: 25px;
+    top: -8px;
+    position: relative;
+    color: navy;
+}
+
+.done > div, .done > p {
+    text-decoration-line: line-through;
+}
+
+
+
 /* ---------------FORMS--------------- */
 #form-overlay {
     position: absolute;
@@ -137,38 +172,14 @@ textarea {
     font-style: italic;
 }
 
-#projects-container .done .completed-ballot {
-    text-decoration-line: none;
-    opacity: 80%;
-}
-
-#projects-container .done .completed-ballot::after {
-    content: '√';
-    display: block;
-    text-align: center;
-    font-size: 25px;
-    top: -8px;
-    position: relative;
-    color: navy;
-}
-
-#projects-container .done > div {
-    text-decoration-line: line-through;
-}
 
 #projects-container .project > div {
-    display: inline-block;
+    display: inline;
     margin: 3px 10px;
 }
 
 #projects-container .project .ballot {
-    display: inline-block;
-    vertical-align: text-top;
-    width: 18px;
-    height: 18px;
-    margin: 0px;
-    border: 1px solid navy;
-    font-size: 15px;
+    margin: 0;
 }
 
 #projects-container .project > button {
@@ -182,18 +193,6 @@ textarea {
     box-sizing: border-box;
     margin: 0px 10px;
 }
-
-/* #projects-container .selected::before {
-    content: '☐';
-    padding-right: 10px;
-    font-style: normal;
-} */
-
-/* #projects-container .selected::after {
-    content: '🖉';
-    padding: 0px 10px;
-    font-style: normal;
-} */
 
 /* ---------------TASKS COLUMN--------------- */
 #todos-container {
@@ -230,6 +229,27 @@ textarea {
 .priority-high {
     background-color: rgb(206, 126, 126);
 }
+
+.task #list-container {
+    margin: 16px 0;
+}
+.task #list-container > div {
+    margin: 5px 0;
+}
+
+.task .ballot {
+    border-color: black;
+}
+
+.task .ballot::after {
+    color: black
+}
+
+.task p {
+    display: inline-block;
+    margin: 3px 10px;
+}
+
 
 
 @media (max-width: 1180px) and (min-width: 950px) {

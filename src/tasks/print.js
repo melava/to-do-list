@@ -16,19 +16,25 @@ const printQuickTask = (task) => {
     card.setAttribute('data-index', task.id);
     card.setAttribute('data-project', task.project);
 
-    const title = document.createElement('p');
+    const title = document.createElement('h4');
     title.classList.add('centered');
     title.textContent = task.dueDate;
     card.appendChild(title);
 
-    const ul = document.createElement('ul');
+    const listContainer = document.createElement('div');
+    listContainer.id = 'list-container'
     task.list.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        ul.appendChild(li)
+        const line = document.createElement('div');
+        const ballot = document.createElement('div');
+        ballot.classList.add('ballot');
+        const listItem = document.createElement('p');
+        listItem.textContent = item;
+        line.appendChild(ballot)
+        line.appendChild(listItem)
+        listContainer.appendChild(line)
     });
 
-    card.appendChild(ul)
+    card.appendChild(listContainer)
 
     taskContainer.appendChild(card);
 }
