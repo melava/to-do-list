@@ -74,6 +74,122 @@ const _setter = () => {
     return { type, name }
 }
 
+const _taskFactory = () => {
+    const _container = (type, task) => {
+        const card = document.createElement('div');
+        card.classList.add('task');
+        if (type === 'regular'){
+            card.classList.add('post-it');
+        }
+        switch (task.priority) {
+            case 'low':
+                card.classList.add('priority-low')
+                break;
+            case 'normal':
+                card.classList.add('priority-normal')
+                break;
+            case 'high':
+                card.classList.add('priority-high')
+                break;
+                    
+            default:
+                card.classList.add('priority-normal')
+                break;
+        }
+        card.setAttribute('data-index', task.id);
+        card.setAttribute('data-project', task.project);
+
+        return card
+    }
+
+    const _title = (type, task) => {
+        const title = document.createElement('h4');
+        title.classList.add('centered');
+        type === 'quick' ? title.textContent = task.dueDate : title.textContent = task.name;
+        return title
+    }
+    
+    const _list = (task) => {
+        const listContainer = document.createElement('div');
+        listContainer.id = 'list-container'
+        task.list.forEach(item => {
+            const line = document.createElement('div');
+            const ballot = document.createElement('div');
+            ballot.classList.add('ballot');
+            const listItem = document.createElement('p');
+            listItem.textContent = item;
+            line.appendChild(ballot)
+            line.appendChild(listItem)
+            listContainer.appendChild(line)
+        });
+        return listContainer
+    }
+
+    const _date = (task) => {
+        const dueDate = document.createElement('p');
+        dueDate.classList.add('underline');
+        dueDate.textContent = task.dueDate;
+        return dueDate
+    }
+
+    const _description = (task) => {
+        const desc = document.createElement('p');
+        if (task.description.length > 30) {
+            desc.textContent = task.description.slice(0, 30) + ' ...';
+        } else {
+            desc.textContent = task.description;
+        }
+        return desc
+    }
+
+    const _button = (type) => {
+        const button = document.createElement('button');
+        button.classList.add('task-action');
+        button.classList.add(type);
+        switch (type) {
+            case 'edit':
+                button.textContent = '🖉'
+                break;
+            case 'delete':
+                button.textContent = '🗑';
+                break;
+                  
+            default:
+                
+                break;
+        }
+        return button
+    }
+    
+    const taskConstructor = (type, task) => {
+        const container = _container(type, task);
+        const title = _title(type, task);
+        container.appendChild(title);
+        
+        switch (type) {
+            case 'quick':
+                const list = _list(task);
+                container.appendChild(list);
+                break;
+            case 'regular':
+                const date = _date(task);
+                container.appendChild(date);
+                const description = _description(task);
+                container.appendChild(description);
+                break;
+        }
+
+        const button = _button('edit');
+        const button2 = _button('delete');
+        container.appendChild(button);
+        container.appendChild(button2);
+        
+        return container
+    }
+    
+    return { taskConstructor }
+}
+
 const _formFactory = () => {
     const _container = () => {
         const cont = document.createElement('div');
@@ -223,6 +339,7 @@ const isDone = (object, target) => {
 const get = _getter();
 const set = _setter();
 const showForm = _formFactory();
+const createTask = _taskFactory();
 
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
-export { clearInput, closeOverlay, isDone, get, set, showForm }
+export { clearInput, closeOverlay, isDone, get, set, showForm, createTask }

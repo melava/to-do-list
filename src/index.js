@@ -141,9 +141,6 @@ const clickListener = (e) => {
     const clickedProject = e.target.closest('div.project');
     const clickedTask = e.target.closest('div.task');
     const form = e.target.closest('div.form');
-    // console.log(clickedNode);
-    // console.log(clickedProject);
-    // console.log(form);
     if ((clickedNode.id === 'add-project' || clickedNode.id === 'add-todo') && !document.getElementById('name')) { console.log('add button'), chooseForm(clickedNode) }
     else if (clickedProject) { console.log('click on project list'), chooseProjectAction(clickedNode, clickedProject) }
     else if (form && clickedNode.id === 'add-item') { console.log('add an item to list'), submitNewItem() }
