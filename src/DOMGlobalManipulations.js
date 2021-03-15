@@ -53,10 +53,14 @@ const _getter = () => {
         const tasks = document.getElementsByClassName('task');
         return tasks
     }
+    const list = () => {
+        const node = document.getElementById('quick-task-list');
+        return node
+    }
     const submitButton = () => document.getElementById('submit');
     const addItemButton = () => document.getElementById('add-item');
 
-    return { name, type, item, dueDate, description, priority, project, allTasks, submitButton, addItemButton }
+    return { name, type, item, dueDate, description, priority, project, list, allTasks, submitButton, addItemButton }
 }
 
 const _setter = () => {
@@ -69,9 +73,25 @@ const _setter = () => {
         get.name().node.value = value
     }
 
+    const description = (value) => {
+        get.description().node.value = value
+    }
 
+    const dueDate = (value) => {
+        get.dueDate().node.value = value
+    }
 
-    return { type, name }
+    const priority = (value) => {
+        get.priority().node.value = value
+    }
+
+    const submitButton = (value, id, taskIndex) => {
+        get.submitButton().setAttribute('data-task-index', taskIndex)
+        get.submitButton().textContent = value;
+        get.submitButton().id = id;
+    }
+
+    return { type, name, description, dueDate, priority, submitButton }
 }
 
 const _taskFactory = () => {
@@ -153,7 +173,11 @@ const _taskFactory = () => {
             case 'delete':
                 button.textContent = '🗑';
                 break;
-                  
+                
+            case 'status':
+                button.textContent = '√';
+                break;
+                    
             default:
                 
                 break;
@@ -181,8 +205,10 @@ const _taskFactory = () => {
 
         const button = _button('edit');
         const button2 = _button('delete');
+        const button3 = _button('status');
         container.appendChild(button);
         container.appendChild(button2);
+        container.appendChild(button3);
         
         return container
     }

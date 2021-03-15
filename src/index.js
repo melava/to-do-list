@@ -6,6 +6,7 @@ import { printProject, unPrintProject, printNewProjectName, editTasksProject } f
 import { toggleSelectedProject } from './projects/selection'
 import { QuickTask, RegularTask } from './tasks/factory'
 import { quickTaskForm, regularTaskForm } from './tasks/form'
+import { editTaskForm } from './tasks/edit'
 import { printQuickTask, printRegularTask, printAddedItem } from './tasks/print'
 
 let projectsArray = [];
@@ -73,21 +74,24 @@ const updateInfos = (formType, index) => {
         // console.log(tasksArray)
         return { project, oldName }
     } else if (formType === 'quicklist') {
-        const dueDate = get.dueDate().value;
-        const getList = quickList.map(item => item);
-        const taskId = tasksArray.length;
-        const currentProject = get.project().value;
-        const project = QuickTask(dueDate, getList, currentProject, taskId)
+        tasksArray[index].dueDate = get.dueDate().value;
+        const oldList = tasksArray[index].list;
+        const newList = quickList.map(item => item);
+        const fullList = oldList.concat(newList);
+        tasksArray[index].list = fullList.map(item => item);
+        const project = QuickTask(tasksArray[index].dueDate, tasksArray[index].list, tasksArray[index].project, index)
+        // console.log(tasksArray)
         return project
     } else if (formType === 'regular') {
-        const name = get.name().value;
-        const dueDate = get.dueDate().value;
-        const desc = get.description().value;
-        const priority = get.priority().value;
-        const currentProject = get.project().value;
-        const taskId = tasksArray.length;
-        const project = RegularTask(name, dueDate, desc, currentProject, priority, taskId)
-        return project
+        console.log('update array of a normal task')
+        // const name = get.name().value;
+        // const dueDate = get.dueDate().value;
+        // const desc = get.description().value;
+        // const priority = get.priority().value;
+        // const currentProject = get.project().value;
+        // const taskId = tasksArray.length;
+        // const project = RegularTask(name, dueDate, desc, currentProject, priority, taskId)
+        // return project
     }
 }
 
@@ -146,6 +150,7 @@ const clickListener = (e) => {
     else if (form && clickedNode.id === 'add-item') { console.log('add an item to list'), submitNewItem() }
     else if (form && clickedNode.id === 'submit') { console.log('submit a form'), submitForm(form) }
     else if (clickedTask) { console.log('clicked on a task'), chooseTaskAction(clickedNode, clickedTask) }
+    else if (clickedNode.id === 'update') { console.log('update task'), updateTask(clickedNode, form)}
 }
 
 const chooseForm = (target) => {
@@ -184,10 +189,20 @@ const chooseProjectAction = (target, project) => {
 }
 
 const chooseTaskAction = (target, task) => {
+    // console.log(target);
     if (target.className.includes('ballot') && target.closest('div#list-container')) { 
         isDone(target.parentNode, target);
         // updateStatus(task.dataset.index);
-    } 
+    } else if (target.className.includes('edit')) { 
+        // console.log('edit');
+        const taskObject = getTaskInfos(task.dataset.index);
+        editTaskForm(task, taskObject);
+    } else if (target.className.includes('delete')) { 
+        console.log('delete')
+    } else if (target.className.includes('status')) { 
+        console.log('toggle task status')
+    }
+    
 }
 
 const submitNewItem = () => {
@@ -233,11 +248,27 @@ const dispatchUpdate = (project) => {
         editTasksProject(object, oldName);
     } else {
         console.log('invalid');
-        
         formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
     }
 }
 
+const updateTask = (target, formNode) => {
+    const formType = formNode.className.replace(/-*form/g, '').trim();
+    const index = target.dataset.taskIndex;
+    const object = updateInfos(formType, index);
+    const valid = checkValidity(formType, object);
+    if (valid) {
+        console.log(object);
+        closeOverlay();
+    } else {
+        console.log('invalid');
+        formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
+    }
+}
+
+const getTaskInfos = (index) => {
+    return tasksArray[index]
+}
 
 
 // ----------------------------------CALLS
@@ -258,4 +289,4 @@ const initiatePage = (() => {
 })();
 document.addEventListener('click', clickListener)
 
-export { projectsArray, tasksArray }
+export { projectsArray, tasksArray, quickList }

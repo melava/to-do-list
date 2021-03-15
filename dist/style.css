@@ -98,6 +98,7 @@ h4 {
     width: 70%;
     height: 300px;
     margin: 10vh 15%;
+    padding: 20px;
     display: flex;
     flex-wrap: wrap;
     align-content: space-evenly;
