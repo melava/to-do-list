@@ -2,12 +2,12 @@ import { get, closeOverlay, isDone, clearInput } from './DOMGlobalManipulations'
 import { Project } from './projects/factory'
 import { projectForm } from './projects/form'
 import { editProjectForm } from './projects/edit'
-import { printProject, unPrintProject, printNewProjectName, editTasksProject } from './projects/print'
+import { printProject } from './projects/print'
 import { toggleSelectedProject } from './projects/selection'
 import { QuickTask, RegularTask } from './tasks/factory'
 import { quickTaskForm, regularTaskForm } from './tasks/form'
 import { editTaskForm } from './tasks/edit'
-import { printQuickTask, printRegularTask, printAddedItem } from './tasks/print'
+import { printTask, printAddedItem } from './tasks/print'
 
 let projectsArray = [];
 let quickList = [];
@@ -44,23 +44,6 @@ const getFormInfos = (formType) => {
     }
 }
 
-const checkValidity = (formType, object) => {
-    let validity;
-    if (formType === 'project') {
-        object.name ? validity = true : validity = false;
-        return validity
-    } else if (formType === 'quicklist') {
-        object.list.length > 0 ? validity = true : validity = false;
-        return validity
-    } else if (formType === 'regular') {
-        object.name ? validity = true : validity = false;
-        return validity
-    } else if (formType === 'listItem') {
-        object ? validity = true : validity = false;
-        return validity
-    }
-}
-
 const updateInfos = (formType, index) => {
     if (formType === 'project') {
         const oldName = projectsArray[index].name;
@@ -79,19 +62,34 @@ const updateInfos = (formType, index) => {
         const newList = quickList.map(item => item);
         const fullList = oldList.concat(newList);
         tasksArray[index].list = fullList.map(item => item);
-        const project = QuickTask(tasksArray[index].dueDate, tasksArray[index].list, tasksArray[index].project, index)
+        const task = QuickTask(tasksArray[index].dueDate, tasksArray[index].list, tasksArray[index].project, index)
         // console.log(tasksArray)
-        return project
+        return task
     } else if (formType === 'regular') {
-        console.log('update array of a normal task')
-        // const name = get.name().value;
-        // const dueDate = get.dueDate().value;
-        // const desc = get.description().value;
-        // const priority = get.priority().value;
-        // const currentProject = get.project().value;
-        // const taskId = tasksArray.length;
-        // const project = RegularTask(name, dueDate, desc, currentProject, priority, taskId)
-        // return project
+        tasksArray[index].name = get.name().value;
+        tasksArray[index].dueDate = get.dueDate().value;
+        tasksArray[index].description = get.description().value;
+        tasksArray[index].priority = get.priority().value;
+        const task = RegularTask(tasksArray[index].name, tasksArray[index].dueDate, tasksArray[index].description, tasksArray[index].project, tasksArray[index].priority, index)
+        // console.log(tasksArray)
+        return task
+    }
+}
+
+const checkValidity = (formType, object) => {
+    let validity;
+    if (formType === 'project') {
+        object.name ? validity = true : validity = false;
+        return validity
+    } else if (formType === 'quicklist') {
+        object.list.length > 0 ? validity = true : validity = false;
+        return validity
+    } else if (formType === 'regular') {
+        object.name ? validity = true : validity = false;
+        return validity
+    } else if (formType === 'listItem') {
+        object ? validity = true : validity = false;
+        return validity
     }
 }
 
@@ -104,7 +102,7 @@ const addToArray = (formType, object) => {
         projectsArray.push(object);
         return projectsArray
     } else if (formType === 'quicklist') {
-        quickList = [];
+        emptyListArray();
         tasksArray.push(object);
         return tasksArray
     } else if (formType === 'regular') {
@@ -116,26 +114,26 @@ const addToArray = (formType, object) => {
     }
 }
 
-// -------------- CONTROL VIEW -------------- //
-const print = (formType, object) => {
-    if (formType === 'project') {
-        printProject(object);
-    } else if (formType === 'quicklist') {
-        printQuickTask(object);
-    } else if (formType === 'regular') {
-        printRegularTask(object);
-    } else if (formType === 'listItem') {
-        printAddedItem(object)
-    }
+const emptyListArray = () => {
+    quickList = [];
 }
 
-const unPrint = (formType, object) => {
+const getTaskInfos = (index) => {
+    return tasksArray[index]
+}
+
+
+// -------------- CONTROL VIEW -------------- //
+const print = (formType, object, action) => {
     if (formType === 'project') {
-        unPrintProject(object);
-    } else if (formType === 'quicklist') {
-        // printQuickTask(object);
-    } else if (formType === 'regular') {
-        // printRegularTask(object);
+        printProject(object, action);
+    } else if (formType === 'quicklist' || formType === 'regular') {
+        printTask(formType, object, action);
+        if (action === 'edit') {
+            closeOverlay()
+        }
+    } else if (formType === 'listItem') {
+        printAddedItem(object)
     }
 }
 
@@ -178,7 +176,7 @@ const chooseProjectAction = (target, project) => {
         }
         editProjectForm(project.childNodes[1]);
     } else if (target.className.includes('project-action') && project.childNodes[1].tagName !== 'DIV') {
-        dispatchUpdate(project);
+        updateProject(project);
     } else {
         if (project.className.includes('selected') && project.childNodes[1].tagName === 'DIV') {
             editProjectForm(project.childNodes[1]);
@@ -194,7 +192,6 @@ const chooseTaskAction = (target, task) => {
         isDone(target.parentNode, target);
         // updateStatus(task.dataset.index);
     } else if (target.className.includes('edit')) { 
-        // console.log('edit');
         const taskObject = getTaskInfos(task.dataset.index);
         editTaskForm(task, taskObject);
     } else if (target.className.includes('delete')) { 
@@ -206,12 +203,13 @@ const chooseTaskAction = (target, task) => {
 }
 
 const submitNewItem = () => {
+    const action = 'new';
     const formType = 'listItem';
     const item = getFormInfos(formType);
     const valid = checkValidity(formType, item);
     if (valid) {
         const list = addToArray(formType, item); 
-        print(formType, item);
+        print(formType, item, action);
         clearInput(get.item().node)
         // console.log(list)
     } else {
@@ -221,12 +219,13 @@ const submitNewItem = () => {
 }
 
 const submitForm = (formNode) => {
+    const action = 'new';
     const formType = formNode.className.replace(/-*form/g, '').trim();
     const object = getFormInfos(formType);
     const valid = checkValidity(formType, object);
     if (valid) {
         const list = addToArray(formType, object);
-        print(formType, object);
+        print(formType, object, action);
         closeOverlay();
         // console.log(list)
     } else {
@@ -235,41 +234,34 @@ const submitForm = (formNode) => {
     }
 }
 
-const dispatchUpdate = (project) => {
+const updateProject = (project) => {
+    const action = 'edit';
     const formType = 'project';
     const index = project.dataset.index;
-    const update = updateInfos(formType, index);
-    const object = update.project;
-    const oldName = update.oldName;
-    const valid = checkValidity(formType, object);
+    const object = updateInfos(formType, index);
+    const valid = checkValidity(formType, object.project);
     if (valid) {
-        unPrint(formType, project);
-        printNewProjectName(object, project);
-        editTasksProject(object, oldName);
+        print(formType, object, action);
     } else {
         console.log('invalid');
         formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
     }
 }
 
-const updateTask = (target, formNode) => {
+const updateTask = (task, formNode) => {
+    const action = 'edit';
     const formType = formNode.className.replace(/-*form/g, '').trim();
-    const index = target.dataset.taskIndex;
+    const index = task.dataset.taskIndex;
     const object = updateInfos(formType, index);
     const valid = checkValidity(formType, object);
     if (valid) {
-        console.log(object);
-        closeOverlay();
+        emptyListArray();
+        print(formType, object, action)
     } else {
         console.log('invalid');
         formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
     }
 }
-
-const getTaskInfos = (index) => {
-    return tasksArray[index]
-}
-
 
 // ----------------------------------CALLS
 // add some prototype project and tasks to start the page
@@ -282,10 +274,10 @@ const initiatePage = (() => {
     addToArray('project', protoReg);
     addToArray('quicklist', testQuickTask);
     addToArray('regular', testRegTask);
-    printQuickTask(testQuickTask);
-    printRegularTask(testRegTask);
-    printProject(protoReg);
-    printProject(protoQuick);
+    printTask('quicklist', testQuickTask, 'new');
+    printTask('regular', testRegTask, 'new');
+    printProject(protoQuick, 'new');
+    printProject(protoReg, 'new');
 })();
 document.addEventListener('click', clickListener)
 

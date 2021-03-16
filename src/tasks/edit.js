@@ -1,7 +1,6 @@
 import { regularTaskForm, quickTaskForm } from './form'
 import { set } from '../DOMGlobalManipulations'
-import { printAddedItem } from './print';
-import { quickList } from '../index'
+import { printAddedItem } from './print'
 
 const editTaskForm = (node, task) => {
     if (node.className.includes('post-it')) {

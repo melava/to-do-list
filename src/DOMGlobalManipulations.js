@@ -125,7 +125,7 @@ const _taskFactory = () => {
     const _title = (type, task) => {
         const title = document.createElement('h4');
         title.classList.add('centered');
-        type === 'quick' ? title.textContent = task.dueDate : title.textContent = task.name;
+        type === 'quicklist' ? title.textContent = task.dueDate : title.textContent = task.name;
         return title
     }
     
@@ -191,7 +191,7 @@ const _taskFactory = () => {
         container.appendChild(title);
         
         switch (type) {
-            case 'quick':
+            case 'quicklist':
                 const list = _list(task);
                 container.appendChild(list);
                 break;
@@ -214,6 +214,48 @@ const _taskFactory = () => {
     }
     
     return { taskConstructor }
+}
+
+const _projectFactory = () => {
+    const _container = (project) => {
+        const card = document.createElement('div');
+        card.classList.add('project');
+        card.classList.add(project.type);
+        card.setAttribute('data-index', project.id);
+        return card
+    }
+
+    const _ballot = () => {
+        const ballot = document.createElement('div');
+        ballot.classList.add('ballot');
+        return ballot
+    }
+    
+    const _name = (project) => {
+        const name = document.createElement('div');
+        name.textContent = `${project.name}`;
+        return name
+    }
+
+    const _button = () => {
+        const button = document.createElement('button');
+        button.classList.add('project-action');
+        button.textContent = '🖉';
+        return button
+    }
+    
+    const projectConstructor = (project) => {
+        const container = _container(project);
+        const ballot = _ballot(project);
+        const name = _name(project);
+        const button = _button();
+        container.appendChild(ballot);
+        container.appendChild(name);
+        container.appendChild(button);
+        return container
+    }
+    
+    return { projectConstructor }
 }
 
 const _formFactory = () => {
@@ -366,6 +408,7 @@ const get = _getter();
 const set = _setter();
 const showForm = _formFactory();
 const createTask = _taskFactory();
+const createProject = _projectFactory();
 
 export { container, quickListProjects, postitProjects, taskContainer, addProject, addToDo }
-export { clearInput, closeOverlay, isDone, get, set, showForm, createTask }
+export { clearInput, closeOverlay, isDone, get, set, showForm, createTask, createProject }

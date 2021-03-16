@@ -1,4 +1,4 @@
-import { taskContainer, createTask } from '../DOMGlobalManipulations'
+import { get, taskContainer, createTask } from '../DOMGlobalManipulations'
 
 const printAddedItem = (lastItem) => {
     if (lastItem) {
@@ -9,14 +9,17 @@ const printAddedItem = (lastItem) => {
     }
 }
 
-const printQuickTask = (task) => {
-    const postit = createTask.taskConstructor('quick', task)
-    taskContainer.appendChild(postit)
+const printTask = (type, task, action) => {
+    if (action === 'new') {
+        const postit = createTask.taskConstructor(type, task)
+        taskContainer.appendChild(postit)
+    } else if (action === 'edit') {
+        const oldPostit = get.allTasks()[task.id];
+        const postit = createTask.taskConstructor(type, task);
+        taskContainer.replaceChild(postit, oldPostit);
+    } else {
+        console.log('no action ???');
+    }
 }
 
-const printRegularTask = (task) => {
-    const postit = createTask.taskConstructor('regular', task)
-    taskContainer.appendChild(postit);
-}
-
-export { printAddedItem, printQuickTask, printRegularTask }
+export { printAddedItem, printTask }
