@@ -1,9 +1,9 @@
-const QuickTask = (dueDate, list, project, id) => {
-    return { dueDate, list, project, id }
+const QuickTask = (dueDate, list, project, id, status) => {
+    return { dueDate, list, project, id, status }
 }
 
-const RegularTask = (name, dueDate, description, project, priority, id) => {
-    return { name, dueDate, description, project, priority, id }
+const RegularTask = (name, dueDate, description, project, priority, id, status) => {
+    return { name, dueDate, description, project, priority, id, status }
 }
 
 export { QuickTask, RegularTask }

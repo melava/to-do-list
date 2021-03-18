@@ -9,7 +9,7 @@ const printAddedItem = (lastItem) => {
     }
 }
 
-const printTask = (type, task, action) => {
+const printTask = (action, task, type) => {
     if (action === 'new') {
         const postit = createTask.taskConstructor(type, task)
         taskContainer.appendChild(postit)
@@ -17,6 +17,8 @@ const printTask = (type, task, action) => {
         const oldPostit = get.allTasks()[task.id];
         const postit = createTask.taskConstructor(type, task);
         taskContainer.replaceChild(postit, oldPostit);
+    } else if (action === 'delete') {
+        taskContainer.removeChild(task)
     } else {
         console.log('no action ???');
     }

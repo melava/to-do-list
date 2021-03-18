@@ -63,7 +63,7 @@ h4 {
     font-size: 15px;
 }
 
-.done .completed-ballot { 
+.done .completed-ballot, #task-container > .done > p  { 
     text-decoration-line: none;
 }
 
@@ -72,6 +72,7 @@ h4 {
     display: block;
     text-align: center;
     font-style: normal;
+    font-weight: normal;
     font-size: 25px;
     top: -8px;
     position: relative;
@@ -82,6 +83,15 @@ h4 {
     text-decoration-line: line-through;
 }
 
+#task-container > .done {
+    color: rgb(56, 56, 56);
+    font-style: italic;
+}
+
+#task-container > .done .status {
+    background-color: rgb(104, 219, 123);
+    color: black;
+}
 
 
 /* ---------------FORMS--------------- */
@@ -159,7 +169,8 @@ textarea {
     box-sizing: border-box;
     padding: 25px 10px;
     flex-grow: 0;
-    width: 320px;
+    width: 33%;
+    min-width: 330px;
     background-color: rgb(132, 173, 235);
 }
 
@@ -170,7 +181,7 @@ textarea {
 }
 
 #projects-container .selected {
-    font-style: italic;
+    font-weight: bold;
 }
 
 
@@ -256,13 +267,16 @@ textarea {
 }
 
 .task .task-action {
-    min-width: 50px;
-    background-color: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(148, 147, 147, 0.5);
-    margin: 10px 10px 10px 0;
+    width: 30%;
+    margin: 10px 5% 10px 0;
     font-size: 20px;
+    border: 1px solid rgba(148, 147, 147, 0.5);
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
+.task .task-action:last-of-type {
+    margin: 10px 0;
+}
 
 
 @media (max-width: 1180px) and (min-width: 950px) {

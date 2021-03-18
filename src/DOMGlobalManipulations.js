@@ -101,6 +101,9 @@ const _taskFactory = () => {
         if (type === 'regular'){
             card.classList.add('post-it');
         }
+        if (task.status === 1){
+            card.classList.add('done');
+        }
         switch (task.priority) {
             case 'low':
                 card.classList.add('priority-low')
@@ -401,7 +404,7 @@ const clearInput = (input) => {
 
 const isDone = (object, target) => {
     object.classList.toggle('done');
-    target.classList.toggle('completed-ballot')
+    if (target) target.classList.toggle('completed-ballot');
 }
 
 const get = _getter();

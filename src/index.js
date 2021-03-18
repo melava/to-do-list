@@ -12,6 +12,7 @@ import { printTask, printAddedItem } from './tasks/print'
 let projectsArray = [];
 let quickList = [];
 let tasksArray = [];
+let archivedTasksArray = [];
 
 // -------------- MODEL -------------- //
 const getFormInfos = (formType) => {
@@ -27,7 +28,8 @@ const getFormInfos = (formType) => {
         const getList = quickList.map(item => item);
         const taskId = tasksArray.length;
         const currentProject = get.project().value;
-        const project = QuickTask(dueDate, getList, currentProject, taskId)
+        const status = 0;
+        const project = QuickTask(dueDate, getList, currentProject, taskId, status)
         return project
     } else if (formType === 'regular') {
         const name = get.name().value;
@@ -36,7 +38,8 @@ const getFormInfos = (formType) => {
         const priority = get.priority().value;
         const currentProject = get.project().value;
         const taskId = tasksArray.length;
-        const project = RegularTask(name, dueDate, desc, currentProject, priority, taskId)
+        const status = 0;
+        const project = RegularTask(name, dueDate, desc, currentProject, priority, taskId, status)
         return project
     } else if (formType === 'listItem') {
         const item = get.item().value;
@@ -62,7 +65,7 @@ const updateInfos = (formType, index) => {
         const newList = quickList.map(item => item);
         const fullList = oldList.concat(newList);
         tasksArray[index].list = fullList.map(item => item);
-        const task = QuickTask(tasksArray[index].dueDate, tasksArray[index].list, tasksArray[index].project, index)
+        const task = QuickTask(tasksArray[index].dueDate, tasksArray[index].list, tasksArray[index].project, index, tasksArray[index].status)
         // console.log(tasksArray)
         return task
     } else if (formType === 'regular') {
@@ -70,7 +73,7 @@ const updateInfos = (formType, index) => {
         tasksArray[index].dueDate = get.dueDate().value;
         tasksArray[index].description = get.description().value;
         tasksArray[index].priority = get.priority().value;
-        const task = RegularTask(tasksArray[index].name, tasksArray[index].dueDate, tasksArray[index].description, tasksArray[index].project, tasksArray[index].priority, index)
+        const task = RegularTask(tasksArray[index].name, tasksArray[index].dueDate, tasksArray[index].description, tasksArray[index].project, tasksArray[index].priority, index, tasksArray[index].status)
         // console.log(tasksArray)
         return task
     }
@@ -93,8 +96,10 @@ const checkValidity = (formType, object) => {
     }
 }
 
-const updateStatus = (index) => {
-    projectsArray[index].status === 0 ? projectsArray[index].status = 1 : projectsArray[index].status = 0;
+const updateStatus = (type, index) => {
+    let arr;
+    type === 'project' ? arr = projectsArray : arr = tasksArray;
+    arr[index].status === 0 ? arr[index].status = 1 : arr[index].status = 0;
 }
 
 const addToArray = (formType, object) => {
@@ -118,22 +123,32 @@ const emptyListArray = () => {
     quickList = [];
 }
 
+const removeFromArray = (index) => {
+    archivedTasksArray.push(tasksArray[index])
+    tasksArray.splice(index, 1, '*archived*')
+    return archivedTasksArray[archivedTasksArray.length-1]
+}
+
 const getTaskInfos = (index) => {
     return tasksArray[index]
 }
 
 
 // -------------- CONTROL VIEW -------------- //
-const print = (formType, object, action) => {
+const print = (action, object, formType) => {
     if (formType === 'project') {
         printProject(object, action);
+        if (action === 'new') {
+            closeOverlay()
+        }
     } else if (formType === 'quicklist' || formType === 'regular') {
-        printTask(formType, object, action);
-        if (action === 'edit') {
+        printTask(action, object, formType);
+        if (action !== 'delete') {
             closeOverlay()
         }
     } else if (formType === 'listItem') {
-        printAddedItem(object)
+        printAddedItem(object);
+        clearInput(get.item().node)
     }
 }
 
@@ -143,11 +158,11 @@ const clickListener = (e) => {
     const clickedProject = e.target.closest('div.project');
     const clickedTask = e.target.closest('div.task');
     const form = e.target.closest('div.form');
+
     if ((clickedNode.id === 'add-project' || clickedNode.id === 'add-todo') && !document.getElementById('name')) { console.log('add button'), chooseForm(clickedNode) }
     else if (clickedProject) { console.log('click on project list'), chooseProjectAction(clickedNode, clickedProject) }
-    else if (form && clickedNode.id === 'add-item') { console.log('add an item to list'), submitNewItem() }
-    else if (form && clickedNode.id === 'submit') { console.log('submit a form'), submitForm(form) }
-    else if (clickedTask) { console.log('clicked on a task'), chooseTaskAction(clickedNode, clickedTask) }
+    else if (form && clickedNode.id === 'submit' || clickedNode.id === 'add-item') { console.log('submit a form'), submitForm(form, clickedNode) }
+    else if (clickedTask && !document.getElementById('name')) { console.log('clicked on a task'), chooseTaskAction(clickedNode, clickedTask) }
     else if (clickedNode.id === 'update') { console.log('update task'), updateTask(clickedNode, form)}
 }
 
@@ -168,7 +183,7 @@ const chooseForm = (target) => {
 
 const chooseProjectAction = (target, project) => {
     if (target.className.includes('ballot')) { 
-        updateStatus(project.dataset.index);
+        updateStatus('project', project.dataset.index);
         isDone(project, target);
     } else if (target.className.includes('project-action') && !document.getElementById('name')) {
         if (!project.className.includes('selected')) {
@@ -190,47 +205,34 @@ const chooseTaskAction = (target, task) => {
     // console.log(target);
     if (target.className.includes('ballot') && target.closest('div#list-container')) { 
         isDone(target.parentNode, target);
-        // updateStatus(task.dataset.index);
     } else if (target.className.includes('edit')) { 
         const taskObject = getTaskInfos(task.dataset.index);
         editTaskForm(task, taskObject);
     } else if (target.className.includes('delete')) { 
-        console.log('delete')
+        const taskObject = removeFromArray(task.dataset.index);
+        deleteTask(task, taskObject)
     } else if (target.className.includes('status')) { 
-        console.log('toggle task status')
+        updateStatus('task', task.dataset.index);
+        isDone(target.parentNode);
     }
-    
 }
 
-const submitNewItem = () => {
+const submitForm = (formNode, target) => {
     const action = 'new';
-    const formType = 'listItem';
-    const item = getFormInfos(formType);
-    const valid = checkValidity(formType, item);
-    if (valid) {
-        const list = addToArray(formType, item); 
-        print(formType, item, action);
-        clearInput(get.item().node)
-        // console.log(list)
+    let formType;
+    if (target.id === 'add-item') {
+        formType = 'listItem';
     } else {
-        console.log('error: empty item');
-        get.item().node.focus();
+        formType = formNode.className.replace(/-*form/g, '').trim();
     }
-}
-
-const submitForm = (formNode) => {
-    const action = 'new';
-    const formType = formNode.className.replace(/-*form/g, '').trim();
     const object = getFormInfos(formType);
     const valid = checkValidity(formType, object);
     if (valid) {
-        const list = addToArray(formType, object);
-        print(formType, object, action);
-        closeOverlay();
-        // console.log(list)
+        addToArray(formType, object);
+        print(action, object, formType);
     } else {
         console.log('invalid');
-        formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
+        formType === 'quicklist' || formType === 'listItem' ? get.item().node.focus() : get.name().node.focus();
     }
 }
 
@@ -241,10 +243,10 @@ const updateProject = (project) => {
     const object = updateInfos(formType, index);
     const valid = checkValidity(formType, object.project);
     if (valid) {
-        print(formType, object, action);
+        print(action, object, formType);
     } else {
         console.log('invalid');
-        formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
+        get.name().node.focus();
     }
 }
 
@@ -256,11 +258,22 @@ const updateTask = (task, formNode) => {
     const valid = checkValidity(formType, object);
     if (valid) {
         emptyListArray();
-        print(formType, object, action)
+        print(action, object, formType)
     } else {
         console.log('invalid');
         formType === 'quicklist' ? get.item().node.focus() : get.name().node.focus();
     }
+}
+
+const deleteTask = (task, object) => {
+    const action = 'delete';
+    let formType;
+    if (object.description) {
+        formType = 'regular';
+    } else {
+        formType = 'quicklist';
+    }
+    print(action, task, formType);
 }
 
 // ----------------------------------CALLS
@@ -268,14 +281,14 @@ const updateTask = (task, formNode) => {
 const initiatePage = (() => {
     const protoQuick = Project('quick', 'prototype-shopping-list', 0, 0);
     const protoReg = Project('regular', 'prototype-classic-project', 1, 0);
-    const testQuickTask = QuickTask('2021-03-02', ['aaa', 'bbb'], 'prototype-shopping-list', 0);
-    const testRegTask = RegularTask('task prototype', '2021-03-09', 'description: lorem ipsum dolor sic amat.', 'prototype-classic-project', 'normal', 1);
+    const testQuickTask = QuickTask('2021-03-02', ['aaa', 'bbb'], 'prototype-shopping-list', 0, 0);
+    const testRegTask = RegularTask('task prototype', '2021-03-09', 'description: lorem ipsum dolor sic amat.', 'prototype-classic-project', 'normal', 1, 0);
     addToArray('project', protoQuick);
     addToArray('project', protoReg);
     addToArray('quicklist', testQuickTask);
     addToArray('regular', testRegTask);
-    printTask('quicklist', testQuickTask, 'new');
-    printTask('regular', testRegTask, 'new');
+    printTask('new', testQuickTask, 'quicklist');
+    printTask('new', testRegTask, 'regular');
     printProject(protoQuick, 'new');
     printProject(protoReg, 'new');
 })();
